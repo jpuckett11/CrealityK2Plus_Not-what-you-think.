@@ -220,6 +220,26 @@ CrealityPrint v7.1.1.4472 (released 2026-04-29) was also analyzed (installer dow
 
 The investigator did not run the slicer long enough to capture live analytics traffic in clear.
 
+### 1.14 Items observed in shipped firmware that are difficult to reconcile with standard consumer-IoT practice
+
+Synthesized from §§1.1, 1.6, 1.9, 1.10, 1.11, 1.12, 1.13 above. These items have been called out separately because each is, in the investigator's professional assessment, a choice that a typical consumer-IoT engineering team would not make if asked to justify it in front of a security review:
+
+1. **Hardcoded foreign-academic NTP IP that bypasses DNS** (§1.3). The address `202.118.1.130` (`time.neu.edu.cn`, China Education and Research Network) is the only NTP source contacted without a DNS lookup. The device's other NTP sources resolve normally. A consumer device sold internationally would conventionally default to `pool.ntp.org` or a regional equivalent and would resolve all NTP destinations through DNS, allowing owner-side filtering. The hardcoded IP cannot be blocked at any DNS-level control.
+
+2. **Identical default root password baked into every device on this firmware** (§1.1). The shipped `/etc/shadow` hash decodes to the publicly documented value `creality_2024` and is the same on every K2 Plus running V1.1.5.5. No first-boot script regenerates a per-device password. Standard practice for a network-connected consumer device is to either prompt the user to set a password at setup or to generate a per-device random secret displayed only on the local screen.
+
+3. **Plaintext TLS private key shipped in firmware** (§1.12). `usr/share/cert/server.key` is a plaintext PEM file paired with `server.crt` (CN = `My Server`, O = `Internal Service`, C = `CN`) and `ca.crt` (CN = `My Private CA`, O = `Internal Network`). The naming pattern is the OpenSSL placeholder template for unfilled fields. The cert pair appears to be development-environment material that was not removed before the production build. Every device has the same private key.
+
+4. **Cleartext MQTT in 2026** (§1.6). The persistent MQTT connection to `47.253.214.226:1883` (Alibaba Cloud LLC) is unencrypted. The observed PUBLISH payloads include the device's local LAN IP, production serial number, current toolhead coordinates, and other state. Contemporary IoT practice is MQTT-over-TLS on port 8883.
+
+5. **Creality corporate-internal LAN IP addresses referenced in production firmware** (§1.8 internal-LAN row, §1.13 slicer `update_feed`). The firmware contains references to `172.23.88.185:8080` and `172.29.99.188:4020`. The slicer ships an updater configuration pointing at `http://172.20.180.14/shared/crealityprint/windows` (plain HTTP, RFC1918 address inside Creality's corporate network). These are not reachable from a consumer's network and appear to be configuration-management artifacts from the development environment that were not removed before release.
+
+6. **Plain-HTTP OAuth callback URLs in the slicer source** (§1.13). The slicer's embedded strings include `http://dev.crealitycloud.cn/oauth?back_url=http://localhost:%1%/login` and similar pre-production OAuth flows. OAuth authorization codes traveling over `http://` are observable by any process on the local host, including processes that may not be entitled to the credential.
+
+7. **MAC address handling that misrepresents factory provenance** (§1.11). The WiFi-mode MAC's OUI prefix (the first three bytes) is not registered in IEEE's OUI database checked by the investigator. The U/L bit is set such that the MAC presents as a globally-unique factory MAC. Standard practice for a device that generates its MAC in software is to set the U/L bit to 1 (locally-administered) so observers can correctly identify the MAC as non-factory. The combination here misrepresents the MAC's origin.
+
+Items 1, 2, 3, and 4 are the most consequential. They have direct security-property implications regardless of the operator's intent. Items 5, 6, and 7 are signals of release-engineering hygiene that, taken together with the rest of the report, inform a judgment about how seriously the vendor treats the security boundary between their internal-network configuration and their shipping product.
+
 ## 2. What the investigation did NOT establish
 
 - **No certificate pinning was observed** on the device's HTTPS clients. The mitmproxy CA, once installed in the system trust store, was accepted without complaint. This may or may not be true of other firmware versions or other Creality models.

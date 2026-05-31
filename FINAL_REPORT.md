@@ -240,6 +240,28 @@ Synthesized from §§1.1, 1.6, 1.9, 1.10, 1.11, 1.12, 1.13 above. These items ha
 
 Items 1, 2, 3, and 4 are the most consequential. They have direct security-property implications regardless of the operator's intent. Items 5, 6, and 7 are signals of release-engineering hygiene that, taken together with the rest of the report, inform a judgment about how seriously the vendor treats the security boundary between their internal-network configuration and their shipping product.
 
+### 1.15 Vendor AI integration (from Creality's own public statements)
+
+Creality's AI features (visible in the slicer source as `ai_service_call`, `ai_infill`, and the cloud endpoints `ai-cn.crealitycloud.cn` / `ai-usa.crealitycloud.com`, and in the firmware as `/api/cxy/v2/device/user/reportAiNotice` and `/api/cxy/v2/device/user/submitH264JPG`) are documented by Creality as integrating with **Tencent's Hunyuan large foundation model** via Creality's `MakeNow` platform. The AI use cases publicly described by Creality are model creation/visualization, fault detection during printing (image-based), and optimization of print parameters (supports, toolpaths).
+
+The investigator did not capture the contents of AI-bearing traffic during this investigation (those endpoints did not fire in the steady-state capture window). Inputs that would flow through this path, per the public partnership material, include print-bed camera frames (for fault detection), uploaded 3D model data (for model analysis), and print-configuration parameters.
+
+Combined with §1.3 and §1.6, the complete vendor cloud picture is:
+
+| Function | Operator |
+|---|---|
+| Public-facing API + CDN | Cloudflare (US, fronting) |
+| Firmware OTA / object storage | Alibaba Cloud Object Storage (China + US regions) |
+| IoT MQTT broker | Alibaba Cloud LLC |
+| WebRTC TURN relay (camera) | Alibaba Cloud LLC |
+| AI inference (image-based fault detection, model analysis) | Tencent Hunyuan, via Creality MakeNow |
+| Behavioral analytics (slicer side) | Sensors Analytics (神策数据), China |
+| NTP (one of several sources) | China Education and Research Network |
+
+Three distinct PRC-jurisdiction cloud operators participate in the data path (Alibaba, Tencent, Sensors Analytics). Each is independently subject to the PRC compelled-disclosure regime referenced in the Framing section above.
+
+Source: Creality's own partnership announcement, https://3dprintingindustry.com/news/creality-and-tencent-announce-new-ai-partnership-243692/ and Creality's IPO-positioning press materials covering the MakeNow + Hunyuan integration.
+
 ## 2. What the investigation did NOT establish
 
 - **No certificate pinning was observed** on the device's HTTPS clients. The mitmproxy CA, once installed in the system trust store, was accepted without complaint. This may or may not be true of other firmware versions or other Creality models.

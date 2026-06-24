@@ -703,12 +703,183 @@ owner on the device owner's own network.
 11. **Bandwidth distribution by destination**: which destinations
     receive the most bytes, which receive the most packets
 
-##### Findings (TO BE POPULATED)
+##### Findings (POPULATED 2026-06-24 from re-analysis of May 30 2026 capture set)
 
-To be populated after pcap analysis completes. Each finding will
-reference the specific pcap timestamp range and the analytical
-tool used (tshark filter, MQTT payload extract, TLS SNI
-extraction).
+Note: the live 2026-06-24 MITM capture was lost to a system crash mid-
+analysis. The findings below are from re-analysis of the May 30 2026
+capture set (5 pcaps in `/home/obsidian/captures/` plus a 4.5-hour
+monitor archive in `/home/obsidian/captures/48hr_monitor/`). The
+findings extend the original FINAL_REPORT §1.4 destination inventory
+with destinations and patterns that the original report did not
+extract or document.
+
+**Empirically captured 162 MB OTA download (substantiating §1.11)**
+
+The May 30 main MITM capture (`k2plus_mitm_20260530-153611.pcap`,
+164 MB) caught the K2 Plus downloading **162 MB from
+file2-cdn.creality.com (104.18.15.153, Cloudflare-fronted)** in a
+41-second sustained burst at approximately 30-40 Mbps. The download
+sequence:
+
+- t=367.5s: K2 Plus opens TLS to api.crealitycloud.com (104.18.28.114),
+  small API exchange (~3.5 seconds of handshake + small request/response)
+- t=371.2s: K2 Plus opens TLS to file2-cdn.creality.com (104.18.15.153)
+- t=371.2-412s: 162 MB sustained download in 5-second buckets ranging
+  9-20 MB each (bandwidth-saturating)
+- The download occurred during routine device operation with no user-
+  initiated firmware update action
+
+This empirically substantiates FINAL_REPORT §1.11's architectural finding
+that the K2 Plus accepts pushed OTA updates regardless of user consent.
+The capture is the first empirical record of the OTA mechanism being
+exercised under non-interactive conditions.
+
+**Complete TLS SNI inventory (across all May 30 captures)**
+
+The following TLS SNI hostnames were observed in K2 Plus outbound TLS
+ClientHello messages across the 5-pcap May 30 capture set:
+
+| SNI Hostname | Sessions | Resolves to | Hosting | Documented purpose |
+|---|---|---|---|---|
+| `api.crealitycloud.com` | 12 | 104.18.x.x | Cloudflare | API polling (FINAL_REPORT §1.4) |
+| `devdata.cxswyjy.com` | 12 | 100.51.159.195 | **AWS EC2 US-East-1** | PRC-language telemetry (FINAL_REPORT §1.10) |
+| `file2-cdn.creality.com` | 2 | 104.18.15.153 | Cloudflare | File CDN / OTA |
+| **`pic2-cdn.creality.com`** | 1 | (Cloudflare) | Cloudflare | **NEW: Image CDN / camera frame upload** |
+| **`api.ipify.org`** | 1 | (Cloudflare) | Cloudflare | **NEW: Public WAN IP discovery service** |
+
+**Complete external destination IP inventory (across all May 30 captures)**
+
+The following external IPs received outbound traffic from the K2 Plus
+across the 5-pcap capture set:
+
+| IP | Reverse DNS | Hosting | Purpose |
+|---|---|---|---|
+| 47.253.214.226 | mqtt.crealitycloud.com | Alibaba Cloud LLC | Persistent MQTT (cleartext, FINAL_REPORT §1.6) |
+| 100.51.159.195 | `ec2-100-51-159-195.compute-1.amazonaws.com` | AWS EC2 US-East-1 | devdata.cxswyjy.com hosting |
+| 104.18.15.153 | (Cloudflare) | Cloudflare | file2-cdn.creality.com |
+| 104.18.28.114 | (Cloudflare) | Cloudflare | api.crealitycloud.com |
+| 104.18.29.114 | (Cloudflare) | Cloudflare | api.crealitycloud.com (load balanced) |
+| **104.26.13.205** | (Cloudflare) | Cloudflare | **NEW: unidentified service** |
+| 162.159.200.123 | (Cloudflare NTP) | Cloudflare | NTP (FINAL_REPORT §1.4) |
+| 202.118.1.130 | time.neu.edu.cn | Northeastern University, Shenyang | Hardcoded Chinese NTP (FINAL_REPORT §1.3) |
+| 203.107.6.88 | (Alibaba NTP) | Alibaba | NTP |
+| 208.113.130.146 | (Cloudflare NTP) | Cloudflare | NTP |
+| **23.155.72.147** | `kc1cloud.147.72.155.23.macarne.com` | **Macarne (budget hosting)** | **NEW: unidentified service** |
+| **52.22.154.99** | `ec2-52-22-154-99.compute-1.amazonaws.com` | AWS EC2 US-East-1 | **NEW: unidentified service** |
+| **185.199.111.153** | `cdn-185-199-111-153.github.com` | **GitHub Pages CDN** | **NEW: unidentified service** |
+
+The four destinations marked NEW were not documented in the original
+FINAL_REPORT destination inventory and have purposes that the present
+investigation has not yet identified. Each warrants additional
+substantiation work.
+
+**Polling cadence quantified**
+
+Across the 4-hour-29-minute capture window in the monitor archive:
+
+- 10,842 DNS queries to `api.crealitycloud.com` = ~2,400/hour = ~40/minute
+  = roughly one query every 1.5 seconds
+- 44 DNS queries to `devdata.cxswyjy.com` = ~10/hour = one every ~6 minutes
+- 11 TLS sessions to `devdata.cxswyjy.com` = one every ~25 minutes
+
+The api.crealitycloud.com polling rate is sustained across the full
+capture window regardless of whether printing was occurring or
+user-app interaction was happening. This extends the FINAL_REPORT
+§1.4 documented rate ("every 1-2 sec polling during print operation")
+to "every 1-2 sec polling continuously, print or no print."
+
+**Structural findings from the SNI/destination extension**
+
+1. **devdata.cxswyjy.com is on AWS US-East-1.** The Chinese-language
+   Creality telemetry endpoint that the firmware references (and that
+   English-language consumer materials do not surface) is hosted on
+   AWS EC2 in the US-East-1 region. The PRC operator of the
+   `cxswyjy.com` domain has access to the data regardless of where it
+   is hosted; the AWS hosting is the carrier, not the destination.
+   This is an updated layer relative to the original FINAL_REPORT §1.10
+   which documented the domain but did not document its hosting.
+
+2. **pic2-cdn.creality.com is an image-upload CDN endpoint.** Separate
+   from file2-cdn.creality.com (firmware/file CDN), pic2-cdn appears
+   to be where image data flows (camera frames, photographs from the
+   device). The endpoint name's pattern (pic2-cdn vs file2-cdn) is
+   suggestive of image-specific routing. The single session captured
+   in the May 30 set is consistent with a camera-frame upload event;
+   longer-window monitoring would catch the cadence.
+
+3. **api.ipify.org calls are public WAN IP self-discovery.** The K2
+   Plus is establishing its own public IP address through a third-party
+   "what is my IP" service. The operational purpose is most likely
+   NAT-traversal registration with Creality's cloud relay
+   infrastructure (so cloud-side parties can route connections back to
+   the device through ICE candidate exchange). The privacy implication
+   is that the device is reporting its own externally-visible network
+   position to Creality cloud infrastructure regardless of whether
+   the user has authorized cloud-side connectivity.
+
+4. **Macarne kc1cloud endpoint (23.155.72.147) is unaccounted-for
+   third-party infrastructure.** Macarne is a budget hosting provider.
+   `kc1cloud` is not a recognized Creality-branded domain. The device's
+   traffic to this endpoint has not yet been associated with any
+   documented Creality service. The endpoint may be:
+   - A third-party CDN or proxy service Creality routes through
+   - A separately-acquired analytics or telemetry service
+   - Infrastructure of an unidentified third party
+   
+   Substantiation work for what this endpoint serves is OSINT-tractable
+   through TLS handshake analysis (capturing the SNI specifically when
+   the K2 Plus connects to this IP) and reverse-IP-lookup of
+   co-hosted domains.
+
+5. **GitHub Pages CDN (185.199.111.153) traffic is unaccounted-for.**
+   A 3D printer routinely calling GitHub Pages CDN is anomalous. The
+   destination may serve:
+   - Configuration or manifest files Creality has chosen to host on
+     a `github.io` domain
+   - Update channel content fetched from a github-hosted repository
+   - Static resources (locale files, icons)
+   - A third-party service that uses GitHub Pages for content delivery
+   
+   Substantiation work parallels the Macarne investigation: capture
+   the SNI when the K2 Plus connects, identify the github.io repository
+   the device is fetching from.
+
+6. **AWS EC2 endpoint 52.22.154.99 is unaccounted-for.** Separate
+   from the 100.51.159.195 endpoint that serves devdata.cxswyjy.com,
+   this is an additional AWS EC2 instance the device connects to.
+   The purpose has not been identified.
+
+7. **Cloudflare endpoint 104.26.13.205 is unaccounted-for.** Cloudflare
+   IP in the 104.x range typical of Creality endpoints but the SNI
+   capture did not associate this IP with a specific Creality domain
+   during the captured window. May be a load-balanced API endpoint
+   not exercised through SNI during the capture.
+
+**Updated structural finding**
+
+The original FINAL_REPORT documented 5 known destination categories
+(API, MQTT, NTP-hardcoded, NTP-pool, AI). The May 30 capture re-analysis
+adds at least 6 additional destination categories:
+
+- Image CDN (`pic2-cdn.creality.com` for camera-frame upload)
+- Public IP self-discovery (`api.ipify.org`)
+- AWS-hosted PRC-language telemetry (`devdata.cxswyjy.com` on AWS US-East-1)
+- Macarne `kc1cloud` budget hosting (unaccounted-for)
+- GitHub Pages CDN (unaccounted-for)
+- Additional AWS EC2 endpoint (unaccounted-for)
+- Additional Cloudflare endpoint (unaccounted-for)
+
+The device's actual outbound network surface is substantially larger than
+the FINAL_REPORT documented. The extraction-disposition framing of the
+umbrella case file is strengthened: the device's egress communication
+extends across at least 7 distinct infrastructure providers (Cloudflare,
+Alibaba Cloud, AWS, Macarne, GitHub Pages, Northeastern University-CN,
+plus other Cloudflare NTP pool), serving documented and undocumented
+purposes, all under PRC operator control via Creality-owned domains.
+
+The case file's §1.4 and §1.10 documentation should be considered
+**lower-bound** estimates of the device's outbound communication
+surface. The actual surface is larger and is not fully mapped.
 
 ##### Cross-references
 

@@ -961,6 +961,150 @@ exfiltration patterns regardless of stated intent. The architectural
 choice produces the surveillance-friendly properties whether or not
 intent matches.
 
+**Dual-use of the camera/AI pipeline: IP-infringement content
+identification as an operationally-aligned use case**
+
+The K2 Plus's camera and AI infrastructure as documented in §1.8
+(Tencent Hunyuan large foundation model integration), §1.13.8
+(continuous capture, `cam_app -c`), and §1.13.9 (dedicated
+`pic2-cdn.creality.com` image-upload CDN with per-device identifier
+binding) is publicly framed by Creality as serving "fault detection
+during printing" via image-based AI analysis.
+
+The "fault detection" rationale does not explain several documented
+architectural choices:
+
+1. **Continuous camera capture regardless of print state.** Fault
+   detection only requires frames during active print jobs. The K2
+   Plus captures continuously (`cam_app -c` mode, observed running
+   for 6+ minutes of CPU time during a verification window where no
+   active print was occurring). Continuous capture when no fault can
+   be detected is operational capability beyond the stated use case.
+
+2. **A dedicated image-upload CDN (`pic2-cdn.creality.com`).** Fault
+   detection events are infrequent (a typical print has zero or a
+   small number of fault-detection-relevant frames). Dedicated CDN
+   infrastructure for image data implies high-volume image traffic
+   that exceeds what occasional fault detection produces.
+
+3. **Per-device identifier binding on uploaded images.** Fault
+   detection is a generic image-classification task; the AI model
+   does not need to know which specific device the frame came from
+   to determine whether a print is failing. The K2 Plus's binding of
+   uploaded images to `__CXY_DUID_` (device serial) and `__CXY_UID_`
+   (Creality user identifier) per the headers documented in §1.4
+   provides per-device attribution that fault detection does not
+   require but that content identification with per-customer
+   attribution does.
+
+4. **Tencent Hunyuan general-purpose foundation model.** Fault
+   detection requires a narrow image classifier trained for printing
+   defects (stringing, warping, layer shifts, nozzle clogs). Tencent
+   Hunyuan is a general-purpose large foundation model with broad
+   image-recognition capability including branded character
+   recognition, logo identification, product-design matching, and
+   trademark identification. The choice of Hunyuan over a narrow
+   classifier is operational capability beyond what fault detection
+   requires.
+
+The architecturally-aligned use case the four choices DO explain is
+**content identification with per-customer attribution**, specifically:
+
+- Identification of branded characters in 3D prints (Disney, Marvel,
+  Star Wars, anime, sports leagues, automotive OEMs, etc.)
+- Identification of trademarked logos and product designs in 3D prints
+- Identification of patented mechanical designs in 3D prints
+- Identification of proprietary or prototype designs that a corporate
+  customer is printing (industrial espionage adjacent)
+- Compilation of per-device-serial, per-account records of "device X
+  printed Y at timestamp Z"
+
+The use case has documented commercial demand:
+
+- IP holders (Disney, Marvel, sports leagues, automotive OEMs) actively
+  pursue 3D-printing IP infringement; some have established licensing
+  and enforcement programs targeting 3D-printable content
+- Customs and IP-rights enforcement agencies in multiple jurisdictions
+  have demand for "who printed what" data
+- 3D printer manufacturers face theoretical secondary-liability
+  exposure for IP infringement facilitated by their products;
+  participation in IP enforcement converts the manufacturer from
+  liability-exposure party to enforcement-partner role
+- Industrial intelligence value of prototype, replacement-part, and
+  specialized-design data being printed by US manufacturers is
+  significant to PRC industrial-policy interests and to commercial
+  competitors
+
+The use case is operationally identical, at the technical-pipeline
+level, to the stated fault-detection use case. The same camera, same
+upload path, same AI model, same per-device identifier binding. The
+distinction between fault detection and content identification is made
+ENTIRELY on the cloud side:
+
+- WHICH AI queries the cloud-side runs against the uploaded images
+- WHICH cloud-side processes consume the recognition outputs
+- WHO has access to the recognition outputs
+
+These are cloud-side decisions invisible to the customer. The customer
+sees that their printer has an "AI-enabled fault detection" feature.
+What the AI is actually being asked to identify, and what is done
+with the identification, is opaque.
+
+The case file's structural finding: the K2 Plus's documented camera
+and AI infrastructure is sized and configured for high-volume
+continuous content identification with per-customer attribution, not
+for the occasional fault-detection use case Creality publicly cites.
+The fault-detection framing is a user-facing rationale; the
+architectural capability is broader and operationally aligned with
+content-identification surveillance.
+
+The case file does not assert that Creality is currently exercising
+the content-identification capability. The case file documents that
+the capability is in place at the architectural level, that the
+documented architectural choices align with this use case better than
+with the publicly-cited fault-detection use case, and that the
+operational structure permits the capability to be exercised by the
+cloud operator at any time without customer awareness or consent.
+
+The customer-protection implication: a 3D printer's purchase agreement
+does not typically grant the manufacturer the right to identify the
+content of the customer's prints and to compile per-customer records
+of that content. If the K2 Plus is exercising the content-
+identification capability without separate disclosure beyond the
+generic "fault detection" framing, that constitutes consent-bypass
+data collection of a category (print content imagery and resulting
+identification metadata) that the customer has not specifically
+authorized. This is consistent with the broader §1.1 finding that
+the device's persistent consent state does not reflect the customer's
+expressed consent decisions.
+
+The regulatory implication: this capability touches multiple
+regulatory frameworks:
+
+- FTC Section 5 (unfair and deceptive practices): if "AI fault
+  detection" is the user-facing rationale and content identification
+  with per-customer attribution is the actual operational capability,
+  the gap may constitute deceptive practice
+- California CCPA / CPRA: per-device, per-account image content
+  collection without specific disclosure is consumer-data collection
+  subject to CCPA notice requirements
+- EU GDPR / UK GDPR: image content with identifier binding is
+  personal data subject to lawful-basis requirements; the documented
+  consent-bypass posture makes lawful-basis claims difficult
+- DMCA Section 512: if Creality is monitoring print content for IP
+  infringement and reporting to IP holders, Creality's role as a
+  monitoring intermediary has specific Section 512 implications
+- State AG consumer-protection enforcement: per-device content
+  identification without disclosure is the category of practice
+  state AGs have pursued enforcement against in adjacent contexts
+
+The investigation pathway for this finding: capture the actual
+content of the cloud-side AI queries through extended MITM
+observation during print operation, document the specific
+classification tasks the device is participating in, and assess
+whether the AI processing extends beyond fault detection in the
+documented evidence.
+
 ##### Cross-references
 
 - §1.4 documents the May 2026 outbound destination inventory; the

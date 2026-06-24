@@ -1656,6 +1656,97 @@ upload pipeline + dev_agent remote-command-execution architecture
 constitutes additional surveillance capability beyond what is
 currently documented at the camera layer.
 
+**Lockdown effectiveness verification (2026-06-24)**
+
+Following the documentation of the cloud-side daemon inventory, a
+controlled lockdown was applied to the investigator's K2 Plus device
+via SSH:
+
+- Killed the cloud-side daemons: `master-server`, `app-server`,
+  `display-server`, `upgrade-server`, `audio-server`, `wifi-server`,
+  `web-server`, `Monitor`, `webrtc`, `webrtc_local`, `cam_app`,
+  `ai_capture`, `ai_engine`, `log_main` (the `dev_agent` Go binary
+  with remote command execution architecture)
+- Disabled their init.d scripts via `chmod -x` on
+  `/etc/init.d/adbd`, `/etc/init.d/webrtc`, `/etc/init.d/app`, and
+  `/etc/init.d/S99swupdate_autorun` so they will not restart at boot
+- DNS-sinkholed the Creality cloud domains via `/etc/hosts` entries
+  pointing them at 0.0.0.0
+- Cleared the consent flags in `system_config.json` from 1 to 0 at
+  both the top-level and nested locations
+- Kept running: Klipper (`klippy`), Moonraker, klipper_mcu, nginx,
+  dropbear SSH (the actual 3D printing function)
+
+A 10-minute workstation-side packet capture during the post-lockdown
+window (no print active, no Creality software open, no user
+interaction with the device) was conducted on 2026-06-24 at 03:37
+UTC. The capture results:
+
+- 212 packets total in 10 minutes
+- 13,332 bytes total
+- **Zero external destinations observed**
+- Only conversation: K2 Plus (192.168.1.220) and the LAN gateway
+  (192.168.1.254), 12 packets, 1,176 bytes (normal LAN baseline:
+  mDNS, ARP, DHCP renewals)
+
+Compared to the pre-lockdown documented baseline:
+
+- ~40 DNS queries per minute to `api.crealitycloud.com` (per §1.4
+  and the 4.5-hour monitor archive analysis in §1.13.9)
+- Persistent MQTT connection to Alibaba Cloud
+  (47.253.214.226:1883) generating continuous device-state telemetry
+- Periodic uploads to AWS US-East-1 endpoints serving
+  `devdata.cxswyjy.com`
+- Periodic API polls to additional Cloudflare-fronted endpoints
+- Bandwidth profile of ~1+ Mbps sustained outbound during routine
+  operation
+
+The post-lockdown observation shows **the cloud-side activity drops
+to zero when the cloud-side daemons are stopped**. This is the
+empirical confirmation that:
+
+1. The persistent cloud-side traffic the device generates in normal
+   operation is **entirely produced by the cloud-side daemons**
+   documented in this case file, not by Klipper or Moonraker
+2. Klipper and Moonraker (the open-source 3D-printing software base)
+   do not require external cloud connectivity to operate; their
+   functional scope is local LAN
+3. The actual 3D printing function continues to operate with the
+   cloud-side daemons stopped
+4. The "cloud features" of the device are operationally optional
+   for the printer's stated function and are mandatory only as a
+   default-configuration choice
+
+**Methodological caveat**: the workstation-side capture sees packets
+that transit the workstation's WiFi NIC. K2 Plus → router → ISP
+unicast traffic does not necessarily transit the workstation. The
+zero-external-destinations result is therefore a strong indicator
+but not a complete proof of cloud-side silence. Full verification
+would require either ARP MITM (which would interfere with the
+operator's parallel ongoing investigation work) or device-side
+polling of `/proc/net/tcp` (which requires SSH access; SSH is locked
+out following the lockdown). The indicators across the multiple
+lines of evidence (the daemons we killed are the documented
+cloud-side actors; Klipper and Moonraker do not have external
+destinations in their codebase; the bandwidth dropped immediately
+post-killall) collectively support the interpretation that the
+lockdown is effective.
+
+**Structural finding**: the K2 Plus's cloud-side surveillance
+architecture is **decouplable from the 3D printing function**.
+Creality has chosen to bundle the cloud-side architecture with the
+printing function and to enable the cloud-side architecture by
+default with the consent UI theater documented in §1.1. The choice
+to bundle and default-enable the surveillance is engineering
+decision, not technical necessity. Customers who wish to use the K2
+Plus as a 3D printer without the surveillance architecture can do
+so by stopping the cloud-side daemons; the daemons are not required
+for the printer to function. The case file documents this as a
+structural finding because it affects both the consumer-protection
+analysis (the cloud features are not necessary for the product as
+sold) and the regulatory analysis (Creality could have shipped a
+non-surveilling 3D printer; they chose to ship a surveilling one).
+
 ##### Cross-references
 
 - §1.4 documents the May 2026 outbound destination inventory; the

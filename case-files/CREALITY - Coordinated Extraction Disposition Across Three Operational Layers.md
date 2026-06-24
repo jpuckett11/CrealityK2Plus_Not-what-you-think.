@@ -1297,6 +1297,153 @@ correspondence and the demand emails) are courtesy notifications, not
 CVD-process correspondence, and do not create an obligation to
 withhold publication or coordinate timing.
 
+**Firmware extraction findings (2026-06-24 re-analysis of OTA image
+CR0CN240110C10_V1.1.5.5)**
+
+The K2 Plus's publicly-downloadable OTA firmware image was extracted
+and analyzed during the 2026-06-24 work session. The extraction
+revealed substantial additional architectural detail not surfaced in
+the original FINAL_REPORT inventory:
+
+**System log exfiltration by default**: the configuration file
+`/etc/appetc/alchemistp/config.json` documents that the device
+uploads the following file paths and patterns to Creality cloud,
+with `UploadFileFlag: 1` enabling upload by default:
+
+- `/mnt/UDISK/creality/userdata/log/*` — printer operational logs
+- `/mnt/UDISK/printer_data/logs/*` — printer data logs
+- `/var/log/*` — **Linux system log directory** including
+  `/var/log/messages` (syslog), authentication events, kernel events,
+  USB connect/disconnect events, network events, every process that
+  logs to syslog
+
+The specifically-named files uploaded include `klippy.log`,
+`master-server.log`, `display-server.log`, and `messages` (the Linux
+syslog). This is operationally substantial: the device exfiltrates
+its entire system log to Creality cloud, not merely printer-specific
+telemetry. The Linux syslog contains data about every process running
+on the device, every kernel event, every authentication attempt, and
+every USB device connected. Uploading the full system log is
+structurally distinct from uploading printer state.
+
+**Creality internal-network IPs baked into production firmware**:
+the firmware contains hardcoded references to Creality's internal
+development network:
+
+- `http://172.29.99.188:4020` — Creality internal IP, port 4020,
+  plain HTTP
+- `http://172.29.99.188:1883` — same internal IP, MQTT port
+- `http://172.23.88.185:8080/api/v1/` — Creality internal dev server,
+  port 8080, plain HTTP
+
+These IPs are private RFC 1918 ranges (172.16.0.0/12) consistent with
+Creality's internal corporate network. The implications:
+
+1. The firmware leaks Creality's internal network topology to anyone
+   with access to the public OTA image.
+2. The device attempts to connect to these IPs over plain HTTP/MQTT
+   when present on the device's network path. If a malicious device
+   on the customer's LAN claimed these IPs (e.g., via DHCP, ARP
+   spoofing, or static configuration), the K2 Plus would communicate
+   with it over cleartext protocols. This is a LAN-side spoofing
+   attack vector created by Creality's choice to hardcode internal
+   IPs into shipped firmware.
+
+**Additional cloud endpoints not previously documented in
+FINAL_REPORT**:
+
+| Endpoint | Purpose |
+|---|---|
+| `c-smart.cxswyjy.com` | Additional PRC-language Creality endpoint (alchemistp `SERVERURL`) |
+| `pic-cdn.creality.com` | Additional image CDN (separate from pic2-cdn) |
+| `pic-cdn-dev.creality.com` | Dev environment image CDN |
+| `admin-pre.crealitycloud.cn` | Admin endpoint, Chinese region |
+| `admin-pre.crealitycloud.com` | Admin endpoint, US region |
+| `api-dev.crealitycloud.cn` | Dev API endpoint |
+| `api.crealitycloud.cn` | Chinese-region production API |
+| `pre-tb-iot.crealitycloud.com:1883` | **ThingsBoard IoT platform** pre-production endpoint |
+| `oss-cn-hangzhou.aliyuncs.com` | **Alibaba OSS storage, Hangzhou, China** |
+| `oss-us-east-1.aliyuncs.com` | **Alibaba OSS storage, US-East-1** |
+| `47.114.48.45:1883` | Additional Alibaba MQTT IP |
+
+The presence of "admin" endpoints reachable from production firmware
+is a vulnerability surface that bug-bounty researchers would
+flag in any standard security review. The presence of "dev" endpoints
+in production firmware suggests the firmware build process does not
+separate development and production configurations.
+
+The Alibaba OSS storage buckets in both Hangzhou and US-East-1
+indicate the cloud architecture uses Alibaba's Object Storage Service
+for file/image storage. This is the storage layer behind the
+documented image CDN and file CDN endpoints. The Hangzhou bucket is
+in China; the US-East-1 bucket is in the US. Per the edge-stage
+exfiltration architecture documented earlier, the US-East-1 bucket is
+the speed-optimization landing zone before data syncs to PRC
+infrastructure.
+
+**ThingsBoard IoT platform**: the endpoint `pre-tb-iot.crealitycloud.com`
+identifies the underlying IoT platform as ThingsBoard, an open-source
+IoT platform with documented architecture. ThingsBoard provides:
+
+- Device telemetry collection (matches the MQTT and HTTPS telemetry
+  documented in §1.4-§1.6)
+- Remote device control (matches the WebRTC and cloud-side relay
+  capability documented in §1.7 and §1.13.8)
+- Rule engine and analytics (matches the persistent polling and
+  state-collection patterns documented)
+- Multi-tenant architecture (allowing Creality to operate the
+  platform for many devices simultaneously while maintaining
+  per-device identity)
+
+The use of ThingsBoard does not change the structural finding; it
+identifies the platform-layer architecture Creality has built the
+extraction disposition on top of. ThingsBoard itself is a legitimate
+IoT platform; Creality's configuration of ThingsBoard for the
+purposes documented in this case file is the disposition the case
+file documents.
+
+**Root credential confirmed in shadow file**: the extracted
+`/etc/shadow` file contains:
+
+```
+root:$5$d5o85tQWWFj2/jfn$hbfxMqPeiEXFAn9vLPDw/8KFTnC2I3GN1uQ2mQAh7r1:19872:0:99999:7:::
+```
+
+This is the SHA-256-crypt hash documented in FINAL_REPORT §1.1 with
+plaintext value `creality_2024`. The credential is documented in
+third-party setup guides and is the same value across all K2 Plus
+units shipped on this firmware version. Anyone with the firmware and
+network reachability to a K2 Plus on this version has root SSH access
+via dropbear on port 22 using this credential. This is a documented
+security failure at the manufacturer level.
+
+**Updated structural assessment**
+
+The firmware extraction findings substantially extend the case file's
+documented evidence base:
+
+1. The exfiltration scope is broader than previously documented: full
+   system logs, not just printer state, are uploaded.
+2. The endpoint inventory is broader than previously documented:
+   admin endpoints, dev endpoints, additional image CDNs, additional
+   Chinese-language endpoints, additional Alibaba OSS buckets in both
+   regions, and the underlying ThingsBoard IoT platform are all
+   reachable from the production firmware.
+3. The Creality internal network is leaked into production firmware
+   in ways that both inform attackers about Creality's topology and
+   create LAN-side spoofing attack surface.
+4. The default root credential is confirmed at the firmware level,
+   not just observed at the device level.
+
+The structural disposition framing of the umbrella case file is
+strengthened: the firmware itself is architected for broad data
+extraction (full system logs, not narrow printer telemetry),
+multi-region distribution (Hangzhou + US-East-1 + Cloudflare global +
+AWS US-East-1 + additional unaccounted-for endpoints), and
+operator-side control through ThingsBoard's standard remote-device
+control capabilities. The configuration is consumer-default-enabled
+with the consent flag persistence the case file documents elsewhere.
+
 ##### Cross-references
 
 - §1.4 documents the May 2026 outbound destination inventory; the

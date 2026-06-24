@@ -208,6 +208,11 @@ resolves that channel.
 
 I am not asking. I am informing.
 
+Had you just treated me like a customer you cared about, I likely
+wouldn't have looked this hard. We both know I'd have gotten here
+eventually - it's what I do. But you didn't have to make it this
+easy.
+
 Jay Puckett
 Reckoner / Lead Investigator
 Obsidian Watch Group

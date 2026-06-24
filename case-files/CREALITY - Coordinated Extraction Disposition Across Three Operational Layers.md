@@ -1444,6 +1444,218 @@ operator-side control through ThingsBoard's standard remote-device
 control capabilities. The configuration is consumer-default-enabled
 with the consent flag persistence the case file documents elsewhere.
 
+**Remote command execution architecture (dev_agent Go binary)**
+
+The `/usr/bin/log_main` binary, identified in FINAL_REPORT §1.2 only
+as a Go binary containing the `AgreePrivacyStatus` symbol, has been
+analyzed further in the 2026-06-24 firmware sweep. The binary is the
+compiled output of the Creality `dev_agent` Go package and provides
+remote command execution architecture at the manufacturer-controlled
+level.
+
+Documented exported functions of significance:
+
+- `dev_agent/utils.ExecCommand` - executes arbitrary shell commands
+  at the operating system level (root, given the device's
+  default-root execution context)
+- `dev_agent/handlers.runCommand` - the cloud-callable handler that
+  invokes `ExecCommand` against received commands
+- `dev_agent/public.AESCBCDecrypt` - AES-CBC symmetric decryption
+- `dev_agent/public.AesDecryptFromBase64` - base64-encoded AES
+  ciphertext decryption (the encoding format for commands received
+  from the cloud)
+- `dev_agent/utils.SendJSONPostRequest` - JSON-formatted POST request
+  sender (the channel for result reporting back to the cloud)
+- `dev_agent/utils.CommonSendPostRequest` - generic POST sender
+- `dev_agent/utils.GetPublicIp` - public WAN IP discovery
+- `dev_agent/utils.GetMacDeviceSN` - device serial from MAC
+- `dev_agent/utils.GetCxyUserId` - Creality user identifier retrieval
+- `dev_agent/utils.GetJsonFieldValue` - JSON parsing utility
+- `dev_agent/utils.GetDeviceIsRoot` - root-status check
+- `dev_agent/handlers.checkNetState` - network state check
+- `dev_agent/handlers.getDiskUsage` - disk usage retrieval
+- `dev_agent/handlers.getMemoryUsage` - memory usage retrieval
+
+The architectural composition: the cloud sends AES-CBC-encrypted
+JSON commands (base64-encoded for transport) to the device; the
+device's `dev_agent` decrypts using AES-CBC, parses the command, and
+executes via `ExecCommand` at the OS shell level. Results are
+JSON-encoded and POSTed back via `SendJSONPostRequest`. The device
+operates as the executor of arbitrary cloud-issued commands at
+root privilege.
+
+This is textbook remote command execution architecture, equivalent
+to the command-and-control (C2) architecture documented in
+remote-access trojan analysis literature. The architectural
+difference between this and a documented RAT is the operator: the
+documented architecture is operator-controlled by Creality (the
+device manufacturer); a RAT's operator is unauthorized. Otherwise
+the architecture is identical: encrypted command channel,
+remote command execution, result reporting, persistent operator
+connection.
+
+**Public IP discovery uses two services for fallback**:
+
+The binary references both `https://api.ipify.org` AND
+`http://ifconfig.me/ip` for public WAN IP discovery. The redundant
+discovery services indicate the public IP information is
+operationally important enough to warrant fallback - the device's
+cloud-side architecture relies on accurate public IP information for
+NAT-traversal and remote-relay session establishment.
+
+**On-device AI engine architecture**
+
+The device runs an on-device AI engine in addition to the
+cloud-side Tencent Hunyuan integration documented in §1.8:
+
+- `/usr/bin/ai_capture` - captures camera frames for AI processing,
+  outputs to:
+  - `/mnt/UDISK/ai_image/flowdetect_img/%s%d.jpg` (flow-detection
+    images, the fault-detection use case stated by Creality)
+  - `/mnt/UDISK/ai_image/main_debug` (debug image storage)
+  - `main_capture.h264` (H.264-encoded video output)
+  - `main_capture.nv21` (raw YUV camera output)
+  - `main_capture.bmp` (raw bitmap output)
+- `/usr/bin/ai_engine` - runs AI inference on captured frames,
+  produces object-detection output (the symbol
+  `ai_inference_result_decide` takes a `std::vector<Object>` input,
+  consistent with multi-object detection model output)
+- IPC architecture: `/tmp/ai_client_uds` and `/tmp/ai_server_uds`
+  Unix domain sockets for client-server communication between the
+  capture and inference components
+
+The on-device AI engine architecture means the device performs
+object detection on captured frames BEFORE the frames reach the
+cloud-side Tencent Hunyuan model. The cloud-side processing then
+operates on:
+
+1. Raw frames (uploaded via pic2-cdn.creality.com / pic-cdn.creality.com)
+2. On-device detection results (transmitted via the telemetry
+   pipeline)
+3. Both
+
+The cloud-side has access to both the raw frames and the on-device
+inference output, providing data for whatever cloud-side use case
+the operator chooses to run.
+
+**H.264 video encoding capability**
+
+The `main_capture.h264` output reference in `ai_capture` is
+operationally significant: the device has H.264 video encoding
+capability, not merely individual-frame capture. Combined with the
+continuous capture (`cam_app -c`) and the upload pipeline, the
+architecture is sized for video recording and upload, not just
+still-image capture for occasional fault detection.
+
+**Point cloud data structures**
+
+The audio-server binary contains references to
+`creality/tmp/pointCloud`. Point cloud data is the standard
+representation for 3D depth data (used by depth cameras, LiDAR,
+and 3D scanners such as the CR-Scan Otter). The presence of point
+cloud handling infrastructure on the K2 Plus is one of:
+
+- Preparation infrastructure for interface with the CR-Scan Otter
+  scanner accessory
+- Capability for depth processing if the device's camera includes
+  depth sensing (TBD per hardware-layer sweep)
+- Legacy or unused code from a related Creality product line
+
+The hardware-layer sweep methodology in §6 should specifically
+investigate whether the K2 Plus camera includes depth-sensing
+capability, since the firmware indicates point-cloud handling is
+present at the software layer.
+
+**Camera architecture: USB Video Class**
+
+The reference to `/tmp/uvc_fifo` confirms the camera is a USB Video
+Class (UVC) device, connected via USB rather than via dedicated MIPI
+or other interfaces. UVC is a standard USB device class for video
+capture. The implications:
+
+1. The camera can be replaced with any other UVC-compatible camera
+   for forensic comparison (the camera is not a proprietary
+   interface)
+2. The camera draws power and data through the USB subsystem, which
+   means USB-level monitoring would capture the camera traffic at
+   the host-USB layer
+3. UVC cameras typically have a small embedded microcontroller for
+   USB protocol handling; that MCU is a separate chip-level
+   investigation target
+
+**Direct g-code download from cloud**
+
+The `master-server` binary contains the string `cxy download gcode
+fail` - confirming that the K2 Plus's cloud architecture includes
+direct g-code (3D print job) download from the Creality cloud to
+the device. Creality can push print jobs to the device without
+local-network upload by the user.
+
+**QR code scanning service**
+
+The `app-server` binary references `https://qr.creality.com/scan-code?n=`
+indicating the device participates in QR code scanning workflows.
+This is consistent with Creality Cloud's documented user-flow where
+QR codes are used for device pairing and account binding. The
+implication: the device's authentication and binding to a Creality
+account can be initiated by QR code scanning rather than only by
+explicit user credentials entry.
+
+**OTA mechanism details**
+
+The `upgrade-server` binary documents the OTA upgrade flow:
+
+- Writes to `/sys/devices/platform/swd/swd_update` to trigger the
+  system-wide firmware update via the SWUpdate framework (Yocto/
+  OpenWrt's standard OTA mechanism)
+- Calls `CFS=1 /etc/init.d/mcu_update start` to update the CFS
+  (Creality Filament System) module firmware in addition to the
+  main system
+- Reads `/sys/devices/platform/swd/update_progress` for upgrade
+  progress
+- References scripts `get_ota_board_name.sh`,
+  `get_ota_current_version.sh`, `local_ota_update.sh`,
+  `firmwareRestart`, and `cam_version.json`
+- Tracks `cfs app version`, `cfs update result`, `hw_version`,
+  `st_version`, `sys_version`, `fw_version`
+
+The OTA mechanism is the standard SWUpdate framework with Creality-
+specific scripts layered on top. The 162 MB OTA download empirically
+captured in §1.13.9 reaches this mechanism after the file2-cdn.creality.com
+delivery. The mechanism handles both the main system firmware and
+the CFS module firmware in a coordinated update flow.
+
+**Documented daemon inventory at startup (per /etc/init.d/app)**
+
+The `app` startup script (START=99, last to run at boot) launches the
+following daemons in parallel:
+
+- `master-server` - main API server (the web-server ports 80/443/9998/9999
+  are operated by web-server, but master-server is the protocol-level API)
+- `audio-server` - audio capture/processing service
+- `wifi-server` - WiFi management
+- `app-server` - application logic server
+- `display-server` - display/UI management
+- `upgrade-server` - OTA upgrade handler
+- `web-server` - HTTP server (the listener for the documented ports)
+- `Monitor` - monitoring process (likely health-check loop)
+
+The boot sequence starts ALL of these daemons as a coordinated
+launch at the last init.d step. They run together throughout the
+device's powered-on lifecycle. The architecture is bundled - the
+cloud features, audio, web interface, and OTA mechanism all start
+together and run together. There is no documented mechanism for the
+user to selectively disable individual daemons.
+
+The audio-server daemon's presence warrants further investigation
+(microphone capture? audio output for system sounds? both?). The
+hardware-layer sweep should specifically check for microphone
+hardware on the K2 Plus PCB. If a microphone is present, the
+combination of microphone + dedicated audio-server daemon + cloud
+upload pipeline + dev_agent remote-command-execution architecture
+constitutes additional surveillance capability beyond what is
+currently documented at the camera layer.
+
 ##### Cross-references
 
 - §1.4 documents the May 2026 outbound destination inventory; the

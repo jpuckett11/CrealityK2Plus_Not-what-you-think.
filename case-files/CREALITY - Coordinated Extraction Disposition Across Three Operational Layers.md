@@ -392,15 +392,130 @@ inventory, the radio chains, the antenna feeds, the power architecture)
 has not yet been subject to OWG investigation.
 
 A hardware-layer sweep is in active planning. The sweep methodology is
-documented in §6 below ("Hardware-layer investigation methodology"). The
-sweep is the highest-priority outstanding Layer 1 investigation work and
-will be incorporated into this case file as findings develop.
+documented in §6 below ("Hardware-layer investigation methodology"),
+with the per-chip verification depth methodology in §6.12 through §6.16.
+The sweep is the highest-priority outstanding Layer 1 investigation work
+and will be incorporated into this case file as findings develop.
 
 The hypothesis the sweep will test: the K2 Plus PCB contains additional
 chips, RF chains, or operational components beyond what Creality's
-published documentation discloses. If documented, such findings would
-extend the Layer 1 extraction-disposition framing from the firmware and
-network domains into the hardware-architecture domain.
+published documentation discloses, OR any documented chip has been
+substituted, relabeled, or modified (multi-die Trojan packaging) relative
+to the manufacturer's published reference. If documented, such findings
+would extend the Layer 1 extraction-disposition framing from the firmware
+and network domains into the hardware-architecture domain.
+
+### 1.13 Hardware-layer findings (PENDING)
+
+This subsection will be populated as the §6 hardware-layer sweep
+proceeds. Placeholder structure below corresponds to the three
+verification depths documented in §6.12 through §6.14. Each depth's
+findings will be cross-referenced to the chain-of-custody photographic
+and chemical-analysis archive maintained per §6.9.
+
+#### 1.13.1 Depth 1 findings: Visual + datasheet cross-check (PENDING)
+
+To be populated. Will document, for every chip on the K2 Plus lower
+computer mainboard and every chip on each daughter board (nozzle adapter
+PCBA, screen controller, camera module, any others discovered during
+disassembly):
+
+- Part number, manufacturer, package, date code, lot code, country
+- Datasheet-verified function and expected behavior
+- Visual consistency with the manufacturer's published reference
+  appearance for the labeled part
+- Any flags raised (marking anomaly, surface texture anomaly, date code
+  anomaly, country code anomaly, package dimension anomaly, pin-1
+  marking anomaly)
+- Disposition: cleared, flagged for Depth 2 comparative analysis, or
+  escalated directly to Depth 3 die-level verification
+
+#### 1.13.2 Depth 2 findings: Cross-instance comparative analysis (PENDING)
+
+To be populated. Will document, for every chip with multiple instances
+across the swept boards (the investigator's unit + Amazon-acquired
+comparative samples per §1.13.6 below):
+
+- Side-by-side comparative photography at identical magnification
+- Per-chip cross-instance consistency assessment
+- Any flags raised (manufacturer logo variance, package surface
+  variance, marking font variance, position-discrepancy variance)
+- Disposition: cleared, flagged for Depth 3, or documented as
+  acceptable manufacturing variation
+
+#### 1.13.3 Depth 3 findings: Die-level verification (PENDING)
+
+To be populated. Will document, for every chip flagged at Depth 1 or
+Depth 2 and every chip in a critical-path position warranting Depth 3
+attention regardless of Depth 1/2 disposition:
+
+- X-ray or industrial CT imaging results (service bureau or in-house)
+  with bond wire count, die count within package, conductive structure
+  inventory
+- Decapping and optical die imaging results (HNO3 for plastic packages,
+  H2SO4 for ceramic; PPE and ventilation per safety standard) with die
+  marking, geometry, feature density comparison against published die
+  shots
+- Disposition: substantiated as labeled part, substantiated as
+  substituted/relabeled part, substantiated as Trojan-pattern multi-die
+  package, or substantiated as structurally different from documented
+
+#### 1.13.4 EMI shield inventory (PENDING)
+
+To be populated. Per §6.4 of the methodology: lift every EMI shield;
+document what is underneath. Each shield's contents become an
+extension of the chip inventory and are subject to the same Depth 1/2/3
+verification.
+
+#### 1.13.5 RF chain documentation (PENDING)
+
+To be populated. Per §6.4: antennas (count, type, length, frequency band
+estimate), antenna feed traces, RF front-end ICs (LNA, PA, T/R switch,
+balun, filter), radio baseband ICs, crystal oscillators (count and
+frequencies). Any RF chain not justified by published documentation is a
+high-priority finding.
+
+The K2 Plus's documented network behavior includes 2.4 GHz WiFi.
+Documented expected RF chains: WiFi/BT module, antenna. Any additional
+RF chain found is the highest-priority Layer 1 hardware finding the
+sweep can produce.
+
+#### 1.13.6 Comparative-sample acquisition status (PENDING)
+
+To be populated. Comparative hardware samples being acquired through
+Amazon retail channel (Creality direct-store Mainboard category
+identity-blocked for investigator per §2.5). Targeted samples:
+
+- Creality Official K2 Plus Lower Computer Mainboard, silent variant
+  (model code `CR4F420653GC15_S2`)
+- Official K2 Plus Lower Computer Mainboard, no-drive-motor variant
+  (model code `CR4F420653GC15`, MCU `G0S2F30SRET6`)
+- Creality Official K2 Plus PCB Board / Hotend Adapter / PCBA Nozzle
+  Adapter (multiple variants)
+- K2 Plus screen controller (if separately available)
+- K2 Plus camera module (if separately available)
+
+Multi-board sweep, not single-board sweep, per the methodology in §6.
+
+#### 1.13.7 Critical-path chips warranting Depth 3 attention regardless of Depth 1/2 disposition (PENDING)
+
+To be populated. Per §6 methodology, the following chip categories
+warrant Depth 3 verification independent of Depth 1/2 outcomes due to
+their critical-path position or substitution-attack value:
+
+- The Allwinner T113-S3 SoC (primary processor, highest-value
+  substitution target)
+- The WiFi/BT module (under-shield contents; primary network attack
+  surface)
+- The SPI flash chip(s) (firmware storage; substitution can change
+  device behavior fundamentally)
+- Any chip with a manufacturer logo or marking the investigator does
+  not immediately recognize
+- Any chip with a date code newer than the printer's assembly date
+- Any chip located underneath an EMI shield
+
+Final escalation list will be determined by Depth 1 and Depth 2
+outcomes.
 
 ## Layer 2: Commercial extraction
 
@@ -1000,9 +1115,278 @@ a high-priority finding.**
 ### 6.11 Findings integration
 
 As findings emerge from the hardware sweep, this case file's Layer 1
-section will be updated with a "1.13 Hardware-layer findings" subsection.
-Each finding will be referenced to the specific evidence captured during
-the sweep, with the chain-of-custody pointer.
+section §1.13 will be populated. Each finding will be referenced to the
+specific evidence captured during the sweep, with the chain-of-custody
+pointer.
+
+### 6.12 Per-chip verification, Depth 1: Visual + datasheet cross-check
+
+For every chip on the board, the Depth 1 verification establishes the
+baseline against which Depth 2 and Depth 3 escalation decisions are
+made. Depth 1 is the floor of acceptable verification; no chip exits the
+sweep without Depth 1 having been performed.
+
+#### 6.12.1 Required documentation per chip
+
+- High-resolution top-down photograph with markings legible at full
+  zoom. Recommended: USB microscope at 20x-50x magnification for SMD
+  components, higher for fine-pitch packages
+- Full marking transcription: manufacturer logo, part number, date
+  code, lot code, country code, and any additional alphanumeric
+  identifiers
+- Datasheet lookup for the transcribed part number. Document the
+  datasheet revision and source
+- Datasheet-stated function summary (one-line)
+
+#### 6.12.2 Verification checks
+
+For each chip:
+
+1. Package type and pin count: matches datasheet?
+2. Pin pitch: matches datasheet?
+3. Pin-1 indicator location: matches datasheet orientation?
+4. Package dimensions: within datasheet tolerance?
+5. Marking surface texture: laser-etched, ink-printed, or molded -
+   matches datasheet expectation?
+6. Marking font and character spacing: consistent with manufacturer-
+   standard?
+7. Manufacturer logo: consistent with the documented manufacturer logo
+   for the labeled part?
+8. Date code: plausible given the printer's manufacturing date
+   (component must be older than the printer; component significantly
+   older than expected = old-stock or repurposed)?
+9. Country code: plausible given the manufacturer's documented
+   fabrication locations?
+10. Visible damage or rework: any indication of post-manufacture chip
+    replacement (solder mask damage, flux residue, asymmetric solder
+    joints)?
+
+#### 6.12.3 Depth 1 flags
+
+A chip is flagged from Depth 1 for escalation if any of the following
+apply:
+
+- Marking is laser-etched but the datasheet shows ink-printed (or
+  vice versa)
+- Marking font does not match the manufacturer's documented font
+- Manufacturer logo is missing, altered, or different from documented
+- Date code is in the future, missing, or significantly inconsistent
+  with the printer's assembly date
+- Package dimensions are outside datasheet tolerance
+- Pin-1 indicator is in a different location than the datasheet
+- Visible evidence of post-manufacture replacement or rework
+- Any marking has been sanded, lasered off, or otherwise obscured
+
+A chip is cleared from Depth 1 only if all checks pass and no other
+anomaly is observed. Any uncertainty escalates to Depth 2 (if
+comparative samples are available) or Depth 3.
+
+### 6.13 Per-chip verification, Depth 2: Cross-instance comparative analysis
+
+Depth 2 applies to every chip with multiple instances across the swept
+hardware. The investigator's unit plus the comparative samples acquired
+per §1.13.6 provides instance multiplicity for most chips. Depth 2 is
+the most cost-effective additional verification layer; it catches
+selective-substitution attacks that target a specific unit while leaving
+other units unmodified.
+
+#### 6.13.1 Required documentation per cross-instance comparison
+
+- Side-by-side photograph of the chip from each instance, at identical
+  magnification and lighting
+- Marking transcription from each instance, compared character-by-
+  character
+- Surface texture comparison between instances
+- Position-on-board comparison (chip in same location?)
+
+#### 6.13.2 Verification checks
+
+For each chip with multiple instances:
+
+1. Marking identical across instances: every character matches?
+2. Manufacturer logo identical across instances?
+3. Package surface texture identical across instances?
+4. Date code variance: instances should have date codes within a
+   plausible production run window
+5. Position-on-board identical across instances?
+6. Presence-absence consistency: every chip present in one instance
+   is present in all instances; any chip present in one but absent
+   in another is a major flag
+7. Adjacent component consistency: chips around the verified chip
+   are the same across instances?
+
+#### 6.13.3 Depth 2 flags
+
+A chip is flagged from Depth 2 for escalation to Depth 3 if any of the
+following apply:
+
+- Two "identical" chips look different across instances at high
+  magnification
+- One instance has a chip the other instance does not have at the same
+  position
+- Marking variance beyond date code (different manufacturer logos,
+  different part numbers, different lot codes inconsistent with same
+  production run)
+- Surface texture variance between instances
+- Date code variance beyond a plausible production run window
+- Adjacent component variance suggesting different board revisions
+  shipped under the same SKU
+
+A chip is cleared from Depth 2 if all checks pass. Note that Depth 2
+clearance is not a clearance from Depth 3 if the chip is in a
+critical-path position per §1.13.7.
+
+### 6.14 Per-chip verification, Depth 3: Die-level verification
+
+Depth 3 is the level required to catch sophisticated supply-chain
+attacks: chip substitution where the substituted chip looks visually
+identical to the labeled part, multi-die packaging where a Trojan die
+is added inside the package without changing external appearance, or
+relabeling where a different part has been re-marked to appear as the
+documented part.
+
+Depth 3 is invasive and destructive. Chips that are Depth 3-verified
+generally cannot be returned to functional use. This is why Depth 3 is
+reserved for chips flagged from Depth 1 or Depth 2, or chips in the
+critical-path categories of §1.13.7.
+
+#### 6.14.1 X-ray or industrial CT imaging
+
+X-ray imaging is non-destructive and is the preferred first Depth 3
+step. Options:
+
+- Industrial CT scanning service bureau (typical cost $150-500 per
+  chip; turnaround 1-2 weeks)
+- Local imaging center with appropriate-energy X-ray (faster but
+  variable quality)
+- In-house X-ray if available (industrial-grade or board-inspection
+  X-ray system)
+
+Documentation per X-rayed chip:
+
+- Top-view, side-view, and rotated X-ray images
+- Bond wire count compared to datasheet pin count
+- Die count within package (datasheet specifies single die; observed
+  multiple dies is a major finding)
+- Die dimensions estimated from X-ray, compared to expected
+- Conductive structures inventory (bond wires, lead frame, any
+  additional structures)
+- Anomalies documented with image references
+
+X-ray flags warranting decapping:
+
+- Bond wire count inconsistent with datasheet pin count
+- Multiple dies inside what should be single-die package
+- Die dimensions inconsistent with expected
+- Conductive structures not in the datasheet reference
+
+#### 6.14.2 Decapping and optical die imaging
+
+Decapping removes the package material to expose the die for direct
+optical examination. This is the most definitive Depth 3 verification
+because it allows direct comparison of the die against published die
+shots.
+
+Chemistry:
+
+- Plastic packages (most consumer ICs): red fuming nitric acid (HNO3,
+  ~95% concentration). Heated dropwise application over the package,
+  working from the center outward. Plastic dissolves; die remains.
+- Ceramic packages: sulfuric acid (H2SO4, ~98% concentration) at
+  elevated temperature. More involved; usually outsourced.
+- Modern thin-package ICs: may require mechanical thinning before
+  acid application to reduce acid exposure time.
+
+Safety requirements:
+
+- Fume hood with appropriate acid-handling ventilation
+- Acid-resistant PPE (face shield, neoprene gloves, lab coat, splash
+  apron)
+- Acid neutralization protocol (sodium bicarbonate solution available
+  for spill response)
+- Glass labware only; no plastic in the acid bath path
+- Heated stage with controllable temperature for application
+- Quench bath (deionized water) for stopping the etch when die is
+  exposed
+
+This is serious chemistry. If the investigator is not equipped or
+comfortable with the safety requirements, outsource to a specialist
+service bureau. Service-bureau decapping with optical imaging:
+typically $300-800 per chip, 2-4 week turnaround.
+
+Documentation per decapped chip:
+
+- Optical microscope images of the exposed die at multiple
+  magnifications (50x, 100x, 200x, 500x)
+- Die-marking transcription if visible
+- Die geometry (length, width, aspect ratio) compared to expected
+- Feature density inspection (transistor count estimate, block layout)
+- Comparison to published die shots of the labeled part (if available)
+
+Comparison-against-published-die-shot is the most powerful Depth 3
+verification but requires that published die shots exist. For
+mainstream chips (Allwinner SoCs, common WiFi modules, mainstream SPI
+flash), die shots are publicly available. For obscure chips, the
+comparison may not be possible and the verification falls back to
+sanity-check assessment ("does the die look like a plausible
+implementation of the documented function?").
+
+#### 6.14.3 Depth 3 dispositions
+
+Each Depth 3-verified chip exits the sweep with one of:
+
+1. Substantiated as labeled part: die matches published die shot or
+   sanity-check assessment passes. Chip is cleared at all depths.
+2. Substantiated as substituted/relabeled part: die does not match the
+   labeled part. The actual chip identity is documented to the extent
+   identifiable.
+3. Substantiated as Trojan-pattern multi-die package: package contains
+   the labeled part plus additional die(s). Trojan die is documented
+   to the extent identifiable.
+4. Substantiated as structurally different: die exists but does not
+   match the labeled part or any known substitution pattern. Documented
+   as an open finding pending further identification.
+
+Dispositions 2, 3, and 4 are the highest-impact OWG findings the
+hardware sweep can produce. Each warrants escalation to CISA
+supply-chain risk management and to FCC equipment authorization
+integrity processes.
+
+### 6.15 Verification budget and outsourcing
+
+For a single K2 Plus lower computer mainboard, realistic time budget:
+
+- Depth 1 (visual + datasheet) across all chips: 4-8 hours
+- Depth 2 (cross-instance) across all chips with multiple instances:
+  2-4 hours
+- Depth 3 (X-ray) for flagged chips: 1-2 weeks elapsed per chip if
+  outsourced
+- Depth 3 (decapping + optical) for X-ray-flagged chips: 2-4 weeks
+  elapsed per chip if outsourced
+
+In-house decapping reduces the Depth 3 turnaround but adds capital
+investment (fume hood, acid handling), consumables, and operator-skill
+requirements.
+
+The investment scales with the finding. Start at Depth 1, let what is
+found drive the escalation. The case file will document each
+escalation decision so the chain of reasoning from Depth 1 finding to
+Depth 3 disposition is preserved for any future reader.
+
+### 6.16 Reference materials for the methodology
+
+- Bunnie Huang, *The Hardware Hacker* (2017), particularly the
+  chapters on Shenzhen sourcing and chip identification
+- Bunnie Huang, *Hacking the Xbox* (2003), chip-level reverse
+  engineering methodology
+- FCC equipment authorization database (fcc.gov/oet/ea), internal-
+  photos requirement for FCC-certified products provides comparison
+  imagery for some Creality-class products
+- AnySilicon and AllSemiconductor cross-reference databases for chip
+  identification
+- iFixit teardown database for comparative teardown photography
+- Published die shots: Texplained, Chipworks (now TechInsights), and
+  academic die-shot collections at university chip-design programs
 
 ## Sources
 

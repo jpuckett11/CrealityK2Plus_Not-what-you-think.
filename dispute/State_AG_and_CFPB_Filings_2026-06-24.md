@@ -54,6 +54,17 @@ complaint, Creality engages in:
 appropriate enforcement against the California-based corporate
 presence of Shenzhen Creality 3D Technology Co., Ltd.
 
+**Update 2026-06-24 - Independent BNPL-lender validation**: BNPL
+lender Affirm Inc. (a California-presence financial institution
+subject to California's Department of Financial Protection and
+Innovation oversight) independently reviewed the documented
+evidence supporting this dispute and on 2026-06-24 refunded the
+entire loan principal. The decision is a sophisticated lender's
+professional finding that the merchant's conduct meets the FCBA
+§ 1666i claims-and-defenses threshold. Offered as third-party
+validation of the underlying merchant-misconduct claim.
+Documentation preserved in the public case file.
+
 ---
 
 ## B. Tennessee Attorney General Consumer Protection Division
@@ -99,6 +110,15 @@ authority.
 **Requested action**: Tennessee Consumer Affairs Division
 investigation, complaint mediation, and appropriate enforcement.
 
+**Update 2026-06-24 - Independent BNPL-lender validation**: BNPL
+lender Affirm Inc. independently reviewed the documented evidence
+supporting this dispute and on 2026-06-24 refunded the entire loan
+principal to the Tennessee consumer. The decision reflects a
+sophisticated professional lender's review conclusion that the
+merchant's conduct meets the threshold for FCBA § 1666i claims-
+and-defenses invocation. Documentation preserved in the public
+case file.
+
 ---
 
 ## C. Consumer Financial Protection Bureau
@@ -136,6 +156,26 @@ loan recovery:
 lender (Affirm) and the consumer protection in BNPL-financed
 purchases. The conduct is potentially relevant to the broader CFPB
 attention on BNPL consumer-protection enforcement.
+
+**Update 2026-06-24 - Independent BNPL-lender resolution**: On
+2026-06-24 at approximately 07:34 CT, the BNPL lender Affirm Inc.
+(NASDAQ: AFRM) independently reviewed the documented evidence
+supporting the submitter's claim and refunded the entire loan
+principal of **$1,800.93** to the submitter. The Affirm-side
+merchant of record is identified as "**SP CREALITY USA**," the
+US corporate presence of Shenzhen Creality 3D Technology Co., Ltd.
+The decision reflects Affirm's internal professional review
+conclusion that the merchandise-not-as-described claim was
+sufficient to invoke FCBA § 1666i claims-and-defenses. The Affirm
+event is offered to the CFPB as documentary evidence that the
+BNPL channel is being used by a sophisticated lender as the
+consumer-protection mechanism it is intended to be, AND as
+third-party professional validation of the underlying
+merchant-misconduct claim. The full Affirm documentation is
+preserved in the public case file at
+`github.com/jpuckett11/CrealityK2Plus_sweep/case-files/` under
+"Affirm Full-Loan Refund - Independent BNPL Validation of
+Documented Case."
 
 ---
 

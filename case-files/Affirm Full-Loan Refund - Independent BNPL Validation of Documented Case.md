@@ -84,6 +84,24 @@ This pre-decision-spoliation framing is the case-file finding that strengthens e
 
 Affirm is a publicly-traded, sophisticated BNPL lender (NASDAQ: AFRM) with its own legal team, dispute-analysis staff, and merchant-account management organization. Affirm's decision to refund a full loan is not a casual transaction; it follows internal review against documented merchant-claim criteria and is contestable by the merchant.
 
+### Affirm's decision included substantive technical-evidence review beyond customer affidavit
+
+This case is materially distinguished from a typical BNPL chargeback dispute because Affirm's internal review explicitly incorporated **the technical evidence the customer documented**, not solely the customer's sworn statement. The materials Affirm reviewed and weighed in its decision included:
+
+- The customer's sworn affidavits (2026-06-17 original, 2026-06-23 first supplemental, 2026-06-24 second supplemental)
+- The public investigative case file at `github.com/jpuckett11/CrealityK2Plus_sweep`, including the firmware-extraction findings, network-forensic packet captures, configuration-file artifacts, methodology documentation, and PGP-signed evidentiary materials
+- Technical evidence beyond the affidavit, used as part of the dispute-analysis process
+
+This distinguishes Affirm's decision from a typical "customer-says-merchandise-not-as-described, lender takes word for it" dispute resolution. Affirm's dispute-analysis staff conducted substantive technical-evidence review and concluded that:
+
+1. The documented technical findings were sufficient on their own merits to support the customer's merchandise-not-as-described claim
+2. The merchant-misconduct documentation was substantial enough to invoke FCBA § 1666i claims-and-defenses
+3. The full loan principal (rather than only the SpeedX-undelivered portion) was the appropriate refund scope
+
+A BNPL lender that conducts technical-evidence review on a chargeback dispute (rather than purely affidavit-based review) is performing the kind of due diligence that regulators and consumer-protection authorities recognize as meaningful third-party validation. Affirm's professional dispute-analysis staff acted on the documented evidence as competent reviewers; their decision is therefore not merely a procedural acceptance of the customer's claim but a substantive endorsement of the underlying technical findings.
+
+This elevates the Affirm decision in evidentiary terms: it is not "Affirm took the customer at their word"; it is "Affirm reviewed the technical evidence and concluded the customer's claim is supported."
+
 The full-loan refund (rather than a partial refund covering only the SpeedX-undelivered portion) indicates that Affirm's internal review concluded:
 
 - The merchandise-not-as-described claim was sufficient to flip the entire purchase, not only the non-delivered portion

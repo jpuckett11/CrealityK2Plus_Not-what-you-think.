@@ -289,6 +289,50 @@ The conduct is FTC-relevant because it implicates Section 5
 deceptive practice and because it potentially affects consumer credit
 through the BNPL relationship.
 
+### Independent BNPL-lender validation of the underlying merchant-misconduct claim
+
+On 2026-06-24 at approximately 07:34 CT, Affirm Inc. (NASDAQ: AFRM),
+the BNPL lender of record for the underlying purchase,
+independently reviewed the documented evidence supporting the
+customer's claim and refunded the entire loan principal of
+**$1,800.93** to the customer. The Affirm-side merchant of record
+on the refund notification is identified as "**SP CREALITY USA**,"
+which is the United States corporate presence of Shenzhen Creality
+3D Technology Co., Ltd., located in City of Industry, California.
+
+The refund was processed within approximately three hours of the
+customer's demand email to Creality (sent at approximately 04:30 CT
+the same day) and approximately ninety minutes after Creality
+wiped the customer's Creality.com account profile (documented
+separately under the Account Wipe / Spoliation event).
+
+Affirm is a publicly-traded BNPL lender with professional legal and
+dispute-analysis teams and merchant-account management staff. Affirm
+maintains internal review criteria for full-loan refund decisions
+and the decision is contestable by the merchant. The decision to
+refund the entire loan principal (rather than a partial refund
+covering only the SpeedX-undelivered portion) reflects Affirm's
+internal review conclusion that:
+
+- The customer's merchandise-not-as-described claim was sufficient
+  to flip the entire purchase, not only the non-delivered portion
+- The documented evidence supporting the merchant-misconduct claim
+  was sufficient to invoke FCBA § 1666i claims-and-defenses
+- Affirm is positioned to (and presumably intends to) pursue
+  Creality through their merchant-account dispute process for
+  recovery
+
+The Affirm decision is **third-party professional validation** that
+the documented case meets the threshold for BNPL-lender intervention
+under FCBA § 1666i. It is independent of the customer's own
+assessment of the case and of any subsequent regulatory or judicial
+proceeding. It is offered to the FTC as documentary support for the
+Section 5 deceptive-practice finding the FTC is asked to consider.
+
+The full Affirm-refund documentation is preserved in the case file
+at `github.com/jpuckett11/CrealityK2Plus_sweep/case-files/` (Affirm
+Full-Loan Refund - Independent BNPL Validation of Documented Case).
+
 ---
 
 ## Section 7: No coordinated vulnerability disclosure (CVD) program

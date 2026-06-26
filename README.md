@@ -17,6 +17,27 @@ Group, investigations@obsidianwatch.org. PGP fingerprint
 
 ---
 
+## Consumer recommendation
+
+Do not buy this device.
+
+The K2 Plus exhibits a coordinated extraction disposition across technical, commercial, and regulatory layers that this investigation documents in detail. The disposition includes:
+
+- Credential-collection clause in the Terms of Use enumerating password, passphrase, user ID, account ID, and network ID, with persistent default-on behavior regardless of the consumer's consent answer
+- Account-identity-tagged restriction targeting individual consumers who document the product publicly
+- Hardcoded foreign NTP IP that bypasses DNS-level blocking
+- Chargeback-defeat conduct through redirection to Seel, Inc. (active class-action defendant in *Mickey v. Seel*, N.D. Cal. case 4:26-cv-01336)
+- Refund payment-rail bypass requests defeating consumer chargeback protection and prejudicing BNPL lender recovery
+- Parts unavailability for documented failure modes (F008_PC_FPC_V14 cable, anti-repair pattern observed across three components and corroborated by independent owner reports)
+- Post-resolution one-directional retrieval-demand contact while remaining silent on consumer logistics questions, quantified at a roughly two-orders-of-magnitude responsiveness asymmetry
+- Remote-brick capability demonstrated against the investigator's own device on or about 2026-05-30, with cam_app surveillance persistence through the bricked state
+
+If you already own one, community paths to local-only operation are documented under `recovery/` and require root access plus network lockdown discipline at the gateway. Most consumers will not maintain that discipline indefinitely. The default factory firmware reverts mitigations on update.
+
+The recommendation is unconditional: do not buy this device. Choose any of the open-firmware alternatives (Voron, Prusa with community firmware, Bambu with cloud disabled at the gateway) instead.
+
+---
+
 ## Original sweep (Layer 1 technical evidence)
 
 The Layer 1 technical evidence in the umbrella case file derives from this

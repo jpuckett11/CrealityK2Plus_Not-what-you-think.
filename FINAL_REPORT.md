@@ -18,6 +18,26 @@ This is not a statement about the engineers, employees, or customers of any Chin
 
 Where this report uses terms like "Chinese-registered" or "Chinese-region", it refers to the jurisdiction the operator is subject to, not to a characterization of any individual.
 
+## Consumer recommendation
+
+Do not buy this device.
+
+The recommendation is based on the findings documented in the sections below and on conduct documented in companion files (`dispute/`, `case-files/`). The findings include:
+
+- Credential-collection clause in the Terms of Use enumerating password, passphrase, user ID, account ID, and network ID, with the consent flag persisted on disk regardless of the consumer's answer at first-boot setup (§1.1, §1.2)
+- Hardcoded foreign NTP IP (Northeastern University, Shenyang) reached without DNS lookup, bypassing standard gateway-level mitigations (§1.3)
+- Persistent MQTT and HTTPS telemetry to PRC-jurisdiction infrastructure throughout normal operation (§1.3, §1.6)
+- Account-identity-tagged restriction on the Mainboard SKU category at the Creality direct-store website specifically targeting the investigator's customer identity (see umbrella case file)
+- Chargeback-defeat conduct through redirection to Seel, Inc., an active class-action defendant in *Mickey v. Seel, Inc.*, N.D. Cal. case 4:26-cv-01336 (`dispute/`)
+- Refund payment-rail bypass requests defeating consumer chargeback protection and prejudicing BNPL lender recovery (`dispute/`)
+- Parts unavailability for documented failure modes - the F008_PC_FPC_V14 flex cable is a manufacturer-acknowledged failure mode (V14 revision count) that Creality does not sell as a service part, replicated across three components (compute board, adapter board, the V14 cable itself), corroborated by independent owner reports (`case-files/Anti-Repair Engineering`)
+- Post-resolution one-directional retrieval-demand contact at roughly two-orders-of-magnitude responsiveness asymmetry (high-frequency outbound demand pings versus next-business-day or longer silence on inbound consumer logistics questions), documented as ongoing during 2026-06-24 through 2026-06-25 (`case-files/Affirm Full-Loan Refund`)
+- Remote-brick capability demonstrated against the investigator's own device on or about 2026-05-30, with cam_app surveillance daemon persistence through the bricked state (`case-files/Camera Daemon Persistent Through Bricked State`)
+
+Existing owners can pursue a local-only operation path documented under `recovery/` once the necessary hardware replacement parts are sourced from third parties. The path requires root access (officially provided by Creality), removal of the cloud daemons via init.d, and network lockdown at the gateway (printers VLAN, no WAN route, DNS sinkhole, local NTP, source-MAC egress block). Most consumers will not maintain this discipline indefinitely, and stock-firmware OTA updates revert mitigations.
+
+The recommendation is unconditional: do not buy this device. Open-firmware alternatives suitable for the same use cases exist (Voron community ecosystem, Prusa with community Klipper, Bambu hardware with cloud disabled at the gateway).
+
 ## 1. Observed facts
 
 ### 1.1 Default root credentials

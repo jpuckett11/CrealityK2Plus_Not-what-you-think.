@@ -371,3 +371,25 @@ GPG `9267 A71E 3F0A 4EED 2F97 3F9B A3E2 52F2 4635 CC6C` (ed25519)
 Repository: `https://github.com/jpuckett11/CrealityK2Plus_sweep`
 
 For coordinated disclosure or supplementary material privately, contact the investigator via the GPG-encrypted email above. The repository's commits are GPG-signed by the investigator. Any unsigned commit on `main` should be considered suspect.
+
+## 8. Professional retainer availability
+
+The investigator is available for retainer engagement in litigation and regulatory matters where the work product, methodology, or findings in this case file are relevant to the questions at issue. Specific engagement scopes:
+
+- **Expert witness testimony.** Connected-device extraction practices, consumer-IoT data flows, firmware analysis, MITM-derived traffic evidence, OTA delivery mechanisms, supply-chain identification, and the documentation chain from raw capture to report. Available for declaration, deposition, and trial testimony in state and federal court.
+- **Consumer-protection litigation.** Class actions or AG-led actions involving connected-device manufacturers, consent-flow defects, undisclosed data retention, account-identity-tagged restriction, chargeback-defeat mechanisms, or related conduct documented in this case file or the umbrella file.
+- **IP claims (defensive and plaintiff-side).** Hardware reverse engineering, firmware-level analysis, supply-chain provenance evaluation, and the methodology framework that distinguishes observed behavior from intent claims. Particularly applicable where a defendant's product is alleged to incorporate technology subject to disputed origin, where prior-art questions turn on what a device actually does versus what the documentation says, or where infringement analysis requires runtime-behavior observation distinct from source review.
+- **Right-to-repair and parts-availability matters.** The anti-repair pattern documented across the F008_PC_FPC_V14 cable, the compute board, and the adapter board, with the manufacturer-acknowledged V14 revision count, is a worked example of the conduct pattern relevant to right-to-repair litigation and state-AG enforcement under repair-disclosure statutes.
+- **Regulatory and oversight testimony.** Available to support FTC, CFPB, CISA, NHTSA, and state-AG investigations of the conduct documented across this case file portfolio. Also available for legislative oversight committee testimony where the conduct pattern is relevant to pending policy questions on consumer-IoT, foreign-supply-chain, or extraction-disposition frameworks.
+- **Coordinated vulnerability disclosure and threat-modeling consultation.** Engagement under standard CVD frameworks for vendors who wish to address findings prior to public disclosure, or for organizations operating consumer-IoT products who wish to evaluate their own extraction-disposition posture before a third-party investigator does it for them.
+
+The investigator's existing institutional standing includes Google VRP partnership status, Anthropic VRP researcher relationship, active engagement with US law enforcement cyber units, and the public investigation portfolio at github.com/jpuckett11/ covering the K2 Plus case and the Obsidian Watch Group broader investigative work.
+
+Rate, scope, and conflict screening available on inquiry. Direct contact:
+
+Jay Puckett (Reckoner)
+Lead Investigator, Obsidian Watch Group
+investigations@obsidianwatch.org
+GPG `9267 A71E 3F0A 4EED 2F97 3F9B A3E2 52F2 4635 CC6C`
+
+For litigation-context inquiries, please include the case caption, the role you are considering for the investigator (testimony, consulting expert, supplementary fact witness), and the jurisdiction. For regulatory engagements, include the relevant agency and statutory framework. For CVD engagements, include the affected product and proposed embargo timeline.

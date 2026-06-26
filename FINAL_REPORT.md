@@ -282,6 +282,32 @@ Three distinct PRC-jurisdiction cloud operators participate in the data path (Al
 
 Source: Creality's own partnership announcement, https://3dprintingindustry.com/news/creality-and-tencent-announce-new-ai-partnership-243692/ and Creality's IPO-positioning press materials covering the MakeNow + Hunyuan integration.
 
+### 1.16 Server-side IP retention demonstrated via consumer app diagnostic feature
+
+On 2026-06-26, with the investigator's K2 Plus device offline (powered off, network unreachable), the investigator opened the Creality Print companion application's "Diagnosis" feature for the bound device. The diagnostic dialog displayed the following text verbatim:
+
+> Please check
+> 1. Is the device turned on
+> 2. Is the device connected to the network
+> 3. Whether the device ip has changed (current ip:192.168.1.220)
+
+`192.168.1.220` is the investigator's local LAN address (RFC 1918 private space) for the K2 Plus on the home network. Screenshot preserved at `artifacts/screenshots/creality_app_diagnose_ip_retention_2026-06-26.png` (SHA-256 `12fe07bbbe65a118d10fb2265436ac0e38b618932c2d5d212562fa6d221a3913`).
+
+What this observation demonstrates:
+
+- **Server-side persistence of the device's last-known IP.** The device has been offline for weeks; the diagnostic dialog still returns an IP value labeled "current." The value is retrieved from Creality's backend, not from a live device query. The retention persists past device-offline state.
+- **Application-level collection of the LAN-side IP, not just the WAN-side IP visible passively.** The address shown is a private RFC 1918 address inside the consumer's home network. Creality could not learn this from passive TCP observation - the public WAN IP is what their servers see at the network layer. The LAN-side IP is only available if the device specifically reports its own internal IP to the cloud, which requires application-level enrichment by the device's cloud client.
+- **Consumer-facing surface for the retained IP value.** The retained IP is not a hidden backend field; it is displayed in plain text in the consumer-facing diagnostic dialog. The retention is acknowledged and operationalized.
+- **A separate row in the same UI shows the device's binding identifier (`123715280F1752`) in a column labeled "IP Address."** The conflation between device serial and network address in the UI labeling indicates the field is overloaded for general device-identifier purposes, not strictly for network addressing.
+
+Pairing this with §1.3 (outbound traffic to `api.crealitycloud.com` and `mqtt.crealitycloud.com`) and §1.4 (headers and identifiers transmitted) establishes the full data lifecycle: the device transmits its identifiers and IP to Creality at the wire level (§1.3, §1.4), Creality retains those values server-side (§1.16, this section), and surfaces the retained values to the consumer via diagnostic tooling. The May 30 MITM evidence and the 2026-06-26 app-side demonstration together document collection, transmission, and retention as observable behaviors of the production system.
+
+Implications for owners and regulators:
+
+- IP retention indefinitely-persistent past device offline state is itself a privacy decision. IP addresses are personal data under GDPR Article 4 when linkable to other identifiers, and similar protection applies under CCPA/CPRA for California residents when the IP is linkable to an account.
+- Retention of the LAN-side private IP (not just the public WAN IP) is enriched, application-level data collection - it is not an unavoidable side effect of network connectivity. It is a choice the device's cloud client makes to enrich what Creality's backend would otherwise see.
+- The combination of device-identity tagging (§1.4, §1.5) plus persistent IP retention (this section) plus the account-identity-tagged restriction behavior observed against the investigator's customer identity (umbrella case file) constructs a per-customer location-over-time map maintained by the vendor.
+
 ## 2. What the investigation did NOT establish
 
 - **No certificate pinning was observed** on the device's HTTPS clients. The mitmproxy CA, once installed in the system trust store, was accepted without complaint. This may or may not be true of other firmware versions or other Creality models.

@@ -2075,6 +2075,62 @@ their critical-path position or substitution-attack value:
 Final escalation list will be determined by Depth 1 and Depth 2
 outcomes.
 
+### 1.14 Server-side IP retention demonstrated via consumer app diagnostic feature
+
+On 2026-06-26, with the investigator's K2 Plus device offline (powered off following the 2026-05-30 OTA-induced brick state), the investigator opened the Creality Print companion application's "Diagnosis" feature for the bound device. The diagnostic dialog displayed the following text verbatim:
+
+> Please check
+> 1. Is the device turned on
+> 2. Is the device connected to the network
+> 3. Whether the device ip has changed (current ip:192.168.1.220)
+
+`192.168.1.220` is the investigator's LAN-side address for the K2 Plus, an RFC 1918 private-network address inside the home network.
+
+Screenshot evidence: `artifacts/screenshots/creality_app_diagnose_ip_retention_2026-06-26.png` (SHA-256 `12fe07bbbe65a118d10fb2265436ac0e38b618932c2d5d212562fa6d221a3913`).
+
+**What this observation demonstrates within the extraction-disposition framework:**
+
+The observation provides three independent confirmations that integrate with prior Layer 1 findings:
+
+1. **Server-side persistence of the device's last-known IP, indefinitely past device offline state.** The device has been offline for weeks. The diagnostic dialog still returns an IP value labeled "current." The value is retrieved from Creality's backend, not from a live device query. The retention persists past device-offline state - it is not transient session state, it is durable storage.
+
+2. **Application-level collection of the LAN-side private IP, not the WAN-side public IP.** The address shown is a private RFC 1918 address inside the consumer's home network. Creality could not learn this from passive TCP observation at the network layer - their cloud servers see the public WAN IP. The LAN-side IP is only available to Creality if the device's cloud client specifically reports its own internal IP up to the cloud, which requires application-level enrichment by the device firmware. The collection of the LAN-side IP is a deliberate enrichment choice, not an unavoidable side effect of network connectivity.
+
+3. **Consumer-facing surface for the retained value.** The retained IP is displayed in plain text in the consumer-facing diagnostic dialog. The retention is acknowledged and operationalized.
+
+A second row in the same diagnostic UI for a separately-bound K2 Plus showed the device's binding identifier (`123715280F1752`) in a column labeled "IP Address." The conflation between device serial and network address in the UI labeling indicates the field is overloaded for general device-identifier purposes, not strictly for network addressing.
+
+**Integration with prior Layer 1 findings:**
+
+| Finding | Lifecycle stage |
+|---|---|
+| §1.4 (Outbound traffic during print operation) | Collection point - the device transmits to api.crealitycloud.com and mqtt.crealitycloud.com persistently |
+| §1.5 (MQTT cleartext telemetry content) | Wire-level evidence - the MQTT payloads include the device's local LAN IP, serial, and state, in cleartext |
+| §1.6 (Custom request headers) | Identification - per-device JWT and account-tagged identifiers accompany every transmission |
+| §1.14 (this finding) | Retention - the transmitted values persist in Creality's backend after the device goes offline, and are queryable via consumer tooling |
+
+The MITM evidence from 2026-05-30 (§§1.4-1.6) documents the collection and transmission. The 2026-06-26 app-side demonstration documents the retention. Together they complete the data lifecycle observation: collected from the device → transmitted to Creality cloud → retained in the backend → surfaced through consumer tools.
+
+**Why this fits the coordinated extraction disposition framework:**
+
+A vendor that retains LAN-side IP indefinitely past device offline state, constructed application-level enrichment to capture private-network addressing that wire-level passive collection would not yield, and provides consumer-facing tooling that displays the retained value, has made a series of distinct architectural choices each of which is independently consistent with the extraction-disposition pattern documented across the other Layer 1 findings.
+
+A vendor optimizing for consumer privacy would: not enrich for LAN-side IP at the device end, not retain values past device offline state, not display retained values in consumer-facing surfaces (because the user could observe the retention and ask why).
+
+The combination of:
+- Device-identity tagging across every outbound request (§1.6)
+- User ID assignment without account creation (§1.7)
+- Persistent LAN-side IP retention past offline state (§1.14, this finding)
+- Account-identity-tagged restriction targeting customer identity (umbrella Layer 2 evidence)
+
+...constructs a per-customer, persistent, location-over-time map maintained by the vendor. The map is observable in the consumer-facing UI, demonstrably continuous across device sessions, and not constrained by any consumer action including powered-off state.
+
+**Layer 3 regulatory implications:**
+
+IP addresses are personal data under GDPR Article 4 when linkable to other identifiers (clarified in CJEU *Breyer v. Federal Republic of Germany*, C-582/14, 2016, and consistently applied by EU DPAs since). Similar treatment under CCPA/CPRA when linkable to an account context. Creality's retention of LAN-side private IP linkable to account identity for an indefinitely-long retention period without published retention policy is a documented privacy-regulation concern beyond the cloud-jurisdiction issues already documented in this case file.
+
+The California Privacy Protection Agency has been specifically active on indefinite retention of identifiers without consumer-disclosed retention period. The CCPA-required privacy notice should specify retention period for each category of personal information collected (Cal. Civ. Code § 1798.130(a)(5)(C)(ii)). The "indefinite" retention demonstrated here is not consistent with that disclosure requirement absent a published retention schedule.
+
 ## Layer 2: Commercial extraction
 
 ### 2.1 Three-package split shipment for single $700+ product

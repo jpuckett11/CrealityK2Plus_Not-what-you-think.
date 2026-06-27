@@ -2086,7 +2086,9 @@ On 2026-06-26, with the investigator's K2 Plus device offline (powered off follo
 
 `192.168.1.220` is the investigator's LAN-side address for the K2 Plus, an RFC 1918 private-network address inside the home network.
 
-Screenshot evidence: `artifacts/screenshots/creality_app_diagnose_ip_retention_2026-06-26.png` (SHA-256 `12fe07bbbe65a118d10fb2265436ac0e38b618932c2d5d212562fa6d221a3913`).
+Screenshot evidence: `artifacts/screenshots/creality_app_diagnose_ip_retention_2026-06-26_sanitized.png` (LAN IP, cloud bind device serial, and Creality account UID redacted from the rendered dialog; CrealityPrint application UI and diagnostic dialog text preserved). The original (unredacted) screenshot is retained under chain of custody in the investigator's private case file.
+
+Corroborating wire-level evidence is included verbatim with sensitive identifiers redacted: `artifacts/network/api_crealitycloud_mitm_2026-05-30_redacted.log`. The capture shows authenticated `__CXY_JWTOKEN_` sessions against `api.crealitycloud.com` carrying `__CXY_DUID_` (cloud device serial) and `__CXY_UID_` (Creality account UID) headers, against endpoints including `POST /api/cxy/v2/firmware/checkUpgrade` and `POST /api/cxy/v2/slice/profile/official/material/printerParameter`. JWT bodies decoded during analysis carried `sub` = cloud device serial, `aud` = Creality account UID, `iss` = `https://api.crealitycloud.com`, and multi-week `exp` validity. These authenticated sessions held open against the operator's Cloud Terms of Service refusal and across the printer's offline window, i.e. the wire-level companion to the application-level retention surface observed in the diagnostic dialog.
 
 **What this observation demonstrates within the extraction-disposition framework:**
 

@@ -291,7 +291,9 @@ On 2026-06-26, with the investigator's K2 Plus device offline (powered off, netw
 > 2. Is the device connected to the network
 > 3. Whether the device ip has changed (current ip:192.168.1.220)
 
-`192.168.1.220` is the investigator's local LAN address (RFC 1918 private space) for the K2 Plus on the home network. Screenshot preserved at `artifacts/screenshots/creality_app_diagnose_ip_retention_2026-06-26.png` (SHA-256 `12fe07bbbe65a118d10fb2265436ac0e38b618932c2d5d212562fa6d221a3913`).
+`192.168.1.220` is the investigator's local LAN address (RFC 1918 private space) for the K2 Plus on the home network. Screenshot evidence: `artifacts/screenshots/creality_app_diagnose_ip_retention_2026-06-26_sanitized.png` (LAN IP, cloud bind device serial, and Creality account UID redacted from the rendered dialog; CrealityPrint application UI and diagnostic dialog text preserved). The original (unredacted) screenshot is retained under chain of custody in the investigator's private case file.
+
+The May 30 MITM proxy capture corroborating server-side retention is included verbatim with sensitive identifiers redacted: `artifacts/network/api_crealitycloud_mitm_2026-05-30_redacted.log`. The capture shows the printer initiating authenticated `__CXY_JWTOKEN_` sessions against `api.crealitycloud.com` continuously, with `__CXY_DUID_` and `__CXY_UID_` headers identifying the cloud device serial and Creality account, against endpoints including `POST /api/cxy/v2/firmware/checkUpgrade` and `POST /api/cxy/v2/slice/profile/official/material/printerParameter`. These calls occurred while the operator had refused the Cloud Terms of Service and during a window where the printer was not actively printing. JWT bodies decoded during analysis carried `sub` = cloud device serial, `aud` = Creality account UID, `iss` = `https://api.crealitycloud.com`, and a multi-week `exp` validity, i.e. fully authenticated cloud sessions held open against ToU refusal.
 
 What this observation demonstrates:
 

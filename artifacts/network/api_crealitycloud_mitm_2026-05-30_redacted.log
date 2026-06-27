@@ -1,0 +1,2400 @@
+================================================================================
+K2 Plus phone-home proof. mitmproxy capture, redacted for public release.
+--------------------------------------------------------------------------------
+Source proxy log : /home/obsidian/captures/mitm/api_crealitycloud.log
+Source SHA-256   : (recorded separately; see provenance section)
+Capture endpoint : mitmproxy intercepting outbound 443 from printer LAN segment
+Window           : 2026-05-30 (continuous, multi-hour)
+What this shows  : Printer initiates outbound TLS to api.crealitycloud.com and
+                   devdata.cxswyjy.com on its own. Every connection presents a
+                   __CXY_JWTOKEN_ JWT in request headers, alongside
+                   __CXY_DUID_ (cloud device serial), __CXY_UID_ (Creality
+                   account UID), brand/OS/app fingerprint headers, and a fresh
+                   request ID. JWT bodies decoded during analysis carried:
+                       sub = <device serial>
+                       aud = <Creality account UID>
+                       iss = https://api.crealitycloud.com
+                       exp = unix timestamp (multi-week validity)
+                   This is a fully authenticated cloud session held open by the
+                   printer despite the operator having refused the Cloud Terms
+                   of Service. Endpoints observed include:
+                       POST /api/cxy/v2/firmware/checkUpgrade
+                       POST /api/cxy/v2/slice/profile/official/material/printerParameter
+                   plus the ongoing churn against api.crealitycloud.com and
+                   devdata.cxswyjy.com on every loop.
+Redaction policy : The following values are replaced wherever they appear:
+                       LAN IP                  -> [REDACTED_LAN]
+                       Cloud device serial     -> [REDACTED_DEVICE_SERIAL]
+                       Creality account UID    -> [REDACTED_ACCOUNT_UID]
+                       JWT bearer token        -> [REDACTED_JWT]
+                       __CXY_REQUESTID_ values -> [REDACTED_REQID]
+                       Cloudflare __cf_bm      -> [REDACTED_CF_BM]
+                       Cloudflare CF-RAY       -> [REDACTED_CF_RAY]
+                   All endpoint paths, header NAMES, HTTP methods, response
+                   codes, mitmproxy connect/disconnect events, ephemeral source
+                   ports, destination FQDNs and IPv6 addrs are preserved.
+================================================================================
+
+Proxy server listening at *:443
+[REDACTED_LAN]:60224: client connect
+[REDACTED_LAN]:60224: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60224: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60224: client disconnect
+[REDACTED_LAN]:60224: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60226: client connect
+[REDACTED_LAN]:60226: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60226: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60226: client disconnect
+[REDACTED_LAN]:60226: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60228: client connect
+[REDACTED_LAN]:60228: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60228: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60228: client disconnect
+[REDACTED_LAN]:60228: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60230: client connect
+[REDACTED_LAN]:60230: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60230: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60230: client disconnect
+[REDACTED_LAN]:60230: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60232: client connect
+[REDACTED_LAN]:60232: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60232: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60232: client disconnect
+[REDACTED_LAN]:60232: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60234: client connect
+[REDACTED_LAN]:60234: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60234: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60234: client disconnect
+[REDACTED_LAN]:60234: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60236: client connect
+[REDACTED_LAN]:60236: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60236: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60236: client disconnect
+[REDACTED_LAN]:60236: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60238: client connect
+[REDACTED_LAN]:60238: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60238: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60238: client disconnect
+[REDACTED_LAN]:60238: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60240: client connect
+[REDACTED_LAN]:60240: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60240: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60240: client disconnect
+[REDACTED_LAN]:60240: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60242: client connect
+[REDACTED_LAN]:60242: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60242: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60242: client disconnect
+[REDACTED_LAN]:60242: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60244: client connect
+[REDACTED_LAN]:60244: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60244: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60244: client disconnect
+[REDACTED_LAN]:60244: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60246: client connect
+[REDACTED_LAN]:60246: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60246: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60246: client disconnect
+[REDACTED_LAN]:60246: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60248: client connect
+[REDACTED_LAN]:60248: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60248: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60248: client disconnect
+[REDACTED_LAN]:60248: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60250: client connect
+[REDACTED_LAN]:60250: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60250: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60250: client disconnect
+[REDACTED_LAN]:60250: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60252: client connect
+[REDACTED_LAN]:60252: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60252: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60252: client disconnect
+[REDACTED_LAN]:60252: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60256: client connect
+[REDACTED_LAN]:60256: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60256: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60256: client disconnect
+[REDACTED_LAN]:60256: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60258: client connect
+[REDACTED_LAN]:60258: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60258: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60258: client disconnect
+[REDACTED_LAN]:60258: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60260: client connect
+[REDACTED_LAN]:60260: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60260: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60260: client disconnect
+[REDACTED_LAN]:60260: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60262: client connect
+[REDACTED_LAN]:60262: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60262: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60262: client disconnect
+[REDACTED_LAN]:60262: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60264: client connect
+[REDACTED_LAN]:60264: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60264: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60264: client disconnect
+[REDACTED_LAN]:60264: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60266: client connect
+[REDACTED_LAN]:60266: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60266: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60266: client disconnect
+[REDACTED_LAN]:60266: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60268: client connect
+[REDACTED_LAN]:60268: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60268: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60268: client disconnect
+[REDACTED_LAN]:60268: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60270: client connect
+[REDACTED_LAN]:60270: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60270: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60270: client disconnect
+[REDACTED_LAN]:60270: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60272: client connect
+[REDACTED_LAN]:60272: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60272: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60272: client disconnect
+[REDACTED_LAN]:60272: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60274: client connect
+[REDACTED_LAN]:60274: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60274: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60274: client disconnect
+[REDACTED_LAN]:60274: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60276: client connect
+[REDACTED_LAN]:60276: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60276: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60276: client disconnect
+[REDACTED_LAN]:60276: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60278: client connect
+[REDACTED_LAN]:60278: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60278: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60278: client disconnect
+[REDACTED_LAN]:60278: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60282: client connect
+[REDACTED_LAN]:60282: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60284: client connect
+[REDACTED_LAN]:60284: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60282: POST https://api.crealitycloud.com/api/cxy/v2/firmware/checkUpgrade
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    __CXY_UID_: [REDACTED_ACCOUNT_UID]
+    Content-Length: 111
+ << 200 OK 225b
+    Date: Sun, 31 May 2026 01:43:27 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 225
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:13:27 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60282: client disconnect
+[REDACTED_LAN]:60282: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60286: client connect
+[REDACTED_LAN]:60284: POST https://api.crealitycloud.com/api/cxy/v2/slice/profile/official/material/printerParameter
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    Content-Length: 81
+ << 200 OK 113b
+    Date: Sun, 31 May 2026 01:43:27 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 113
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:13:27 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60284: client disconnect
+[REDACTED_LAN]:60284: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60286: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60288: client connect
+[REDACTED_LAN]:60288: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60286: POST https://api.crealitycloud.com/api/cxy/v2/firmware/checkUpgrade
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    __CXY_UID_: [REDACTED_ACCOUNT_UID]
+    Content-Length: 112
+ << 200 OK 81b
+    Date: Sun, 31 May 2026 01:43:27 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 81
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:13:27 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60286: client disconnect
+[REDACTED_LAN]:60286: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60288: POST https://api.crealitycloud.com/api/cxy/v2/device/printerTypeListNew
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    Content-Length: 2
+ << 200 OK 99.0k
+    Date: Sun, 31 May 2026 01:43:27 GMT
+    Content-Type: application/json; charset=utf-8
+    Transfer-Encoding: chunked
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    Vary: Accept-Encoding
+    Access-Control-Max-Age: 86400
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:13:27 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60288: client disconnect
+[REDACTED_LAN]:60288: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60290: client connect
+[REDACTED_LAN]:60290: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60290: POST https://api.crealitycloud.com/api/cxy/v2/slice/profile/user/listJwt
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    Content-Length: 31
+ << 200 OK 89b
+    Date: Sun, 31 May 2026 01:43:27 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 89
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:13:27 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60290: client disconnect
+[REDACTED_LAN]:60290: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60292: client connect
+[REDACTED_LAN]:60292: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60294: client connect
+[REDACTED_LAN]:60292: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60292: client disconnect
+[REDACTED_LAN]:60292: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60294: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60294: POST https://api.crealitycloud.com/api/cxy/v2/device/user/onwerInfo
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    Content-Length: 2
+ << 200 OK 342b
+    Date: Sun, 31 May 2026 01:43:29 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 342
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:13:29 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60294: client disconnect
+[REDACTED_LAN]:60294: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60298: client connect
+[REDACTED_LAN]:60298: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60298: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60298: client disconnect
+[REDACTED_LAN]:60298: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60300: client connect
+[REDACTED_LAN]:60300: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60300: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60300: client disconnect
+[REDACTED_LAN]:60300: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60304: client connect
+[REDACTED_LAN]:60304: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60304: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60304: client disconnect
+[REDACTED_LAN]:60304: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60306: client connect
+[REDACTED_LAN]:60306: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60306: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60306: client disconnect
+[REDACTED_LAN]:60306: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60308: client connect
+[REDACTED_LAN]:60308: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60308: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60308: client disconnect
+[REDACTED_LAN]:60308: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60310: client connect
+[REDACTED_LAN]:60310: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60310: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60310: client disconnect
+[REDACTED_LAN]:60310: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60312: client connect
+[REDACTED_LAN]:60312: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60312: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60312: client disconnect
+[REDACTED_LAN]:60312: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60314: client connect
+[REDACTED_LAN]:60314: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60314: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60314: client disconnect
+[REDACTED_LAN]:60314: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60316: client connect
+[REDACTED_LAN]:60316: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60316: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60316: client disconnect
+[REDACTED_LAN]:60316: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60318: client connect
+[REDACTED_LAN]:60318: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60318: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60318: client disconnect
+[REDACTED_LAN]:60318: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60320: client connect
+[REDACTED_LAN]:60320: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60320: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60320: client disconnect
+[REDACTED_LAN]:60320: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60322: client connect
+[REDACTED_LAN]:60322: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60322: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60322: client disconnect
+[REDACTED_LAN]:60322: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60324: client connect
+[REDACTED_LAN]:60324: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60324: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60324: client disconnect
+[REDACTED_LAN]:60324: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60326: client connect
+[REDACTED_LAN]:60326: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60326: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60326: client disconnect
+[REDACTED_LAN]:60326: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60328: client connect
+[REDACTED_LAN]:60328: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60328: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60328: client disconnect
+[REDACTED_LAN]:60328: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60330: client connect
+[REDACTED_LAN]:60330: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60330: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60330: client disconnect
+[REDACTED_LAN]:60330: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60332: client connect
+[REDACTED_LAN]:60332: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60332: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60332: client disconnect
+[REDACTED_LAN]:60332: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60334: client connect
+[REDACTED_LAN]:60334: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60334: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60334: client disconnect
+[REDACTED_LAN]:60334: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60336: client connect
+[REDACTED_LAN]:60336: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60336: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60336: client disconnect
+[REDACTED_LAN]:60336: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60338: client connect
+[REDACTED_LAN]:60338: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60338: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60338: client disconnect
+[REDACTED_LAN]:60338: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60340: client connect
+[REDACTED_LAN]:60340: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60340: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60340: client disconnect
+[REDACTED_LAN]:60340: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60342: client connect
+[REDACTED_LAN]:60342: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60342: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60342: client disconnect
+[REDACTED_LAN]:60342: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60344: client connect
+[REDACTED_LAN]:60344: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60344: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60344: client disconnect
+[REDACTED_LAN]:60344: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60346: client connect
+[REDACTED_LAN]:60346: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60346: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60346: client disconnect
+[REDACTED_LAN]:60346: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60348: client connect
+[REDACTED_LAN]:60348: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60348: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60348: client disconnect
+[REDACTED_LAN]:60348: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60350: client connect
+[REDACTED_LAN]:60350: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60350: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60350: client disconnect
+[REDACTED_LAN]:60350: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60352: client connect
+[REDACTED_LAN]:60352: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60352: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60352: client disconnect
+[REDACTED_LAN]:60352: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60354: client connect
+[REDACTED_LAN]:60354: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60354: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60354: client disconnect
+[REDACTED_LAN]:60354: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60356: client connect
+[REDACTED_LAN]:60356: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60356: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60356: client disconnect
+[REDACTED_LAN]:60356: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60358: client connect
+[REDACTED_LAN]:60358: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60358: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60358: client disconnect
+[REDACTED_LAN]:60358: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60360: client connect
+[REDACTED_LAN]:60360: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60360: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60360: client disconnect
+[REDACTED_LAN]:60360: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60366: client connect
+[REDACTED_LAN]:60366: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60366: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60366: client disconnect
+[REDACTED_LAN]:60366: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60368: client connect
+[REDACTED_LAN]:60368: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60368: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60368: client disconnect
+[REDACTED_LAN]:60368: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60370: client connect
+[REDACTED_LAN]:60370: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60370: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60370: client disconnect
+[REDACTED_LAN]:60370: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60372: client connect
+[REDACTED_LAN]:60372: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60372: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60372: client disconnect
+[REDACTED_LAN]:60372: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60374: client connect
+[REDACTED_LAN]:60374: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60374: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60374: client disconnect
+[REDACTED_LAN]:60374: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60376: client connect
+[REDACTED_LAN]:60376: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60376: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60376: client disconnect
+[REDACTED_LAN]:60376: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60378: client connect
+[REDACTED_LAN]:60378: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60378: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60378: client disconnect
+[REDACTED_LAN]:60378: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60380: client connect
+[REDACTED_LAN]:60380: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60380: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60380: client disconnect
+[REDACTED_LAN]:60380: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60382: client connect
+[REDACTED_LAN]:60382: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60382: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60382: client disconnect
+[REDACTED_LAN]:60382: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60384: client connect
+[REDACTED_LAN]:60384: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60384: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60384: client disconnect
+[REDACTED_LAN]:60384: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60386: client connect
+[REDACTED_LAN]:60386: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60386: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60386: client disconnect
+[REDACTED_LAN]:60386: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60388: client connect
+[REDACTED_LAN]:60388: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60388: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60388: client disconnect
+[REDACTED_LAN]:60388: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60390: client connect
+[REDACTED_LAN]:60390: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60390: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60390: client disconnect
+[REDACTED_LAN]:60390: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60392: client connect
+[REDACTED_LAN]:60392: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60392: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60392: client disconnect
+[REDACTED_LAN]:60392: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60394: client connect
+[REDACTED_LAN]:60394: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60394: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60394: client disconnect
+[REDACTED_LAN]:60394: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60396: client connect
+[REDACTED_LAN]:60396: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60396: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60396: client disconnect
+[REDACTED_LAN]:60396: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60398: client connect
+[REDACTED_LAN]:60398: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60398: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60398: client disconnect
+[REDACTED_LAN]:60398: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60400: client connect
+[REDACTED_LAN]:60400: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60400: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60400: client disconnect
+[REDACTED_LAN]:60400: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60402: client connect
+[REDACTED_LAN]:60402: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60402: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60402: client disconnect
+[REDACTED_LAN]:60402: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60404: client connect
+[REDACTED_LAN]:60404: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60404: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60404: client disconnect
+[REDACTED_LAN]:60404: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60406: client connect
+[REDACTED_LAN]:60406: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60406: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60406: client disconnect
+[REDACTED_LAN]:60406: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60408: client connect
+[REDACTED_LAN]:60408: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60408: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60408: client disconnect
+[REDACTED_LAN]:60408: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60410: client connect
+[REDACTED_LAN]:60410: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60410: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60410: client disconnect
+[REDACTED_LAN]:60410: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60412: client connect
+[REDACTED_LAN]:60412: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60412: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60412: client disconnect
+[REDACTED_LAN]:60412: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60414: client connect
+[REDACTED_LAN]:60414: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60414: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60414: client disconnect
+[REDACTED_LAN]:60414: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60416: client connect
+[REDACTED_LAN]:60416: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60416: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60416: client disconnect
+[REDACTED_LAN]:60416: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60418: client connect
+[REDACTED_LAN]:60418: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60418: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60418: client disconnect
+[REDACTED_LAN]:60418: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60420: client connect
+[REDACTED_LAN]:60420: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60420: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60420: client disconnect
+[REDACTED_LAN]:60420: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60422: client connect
+[REDACTED_LAN]:60422: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60422: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60422: client disconnect
+[REDACTED_LAN]:60422: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60424: client connect
+[REDACTED_LAN]:60424: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60424: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60424: client disconnect
+[REDACTED_LAN]:60424: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60426: client connect
+[REDACTED_LAN]:60426: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60426: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60426: client disconnect
+[REDACTED_LAN]:60426: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60428: client connect
+[REDACTED_LAN]:60428: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60428: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60428: client disconnect
+[REDACTED_LAN]:60428: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60430: client connect
+[REDACTED_LAN]:60430: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60430: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60430: client disconnect
+[REDACTED_LAN]:60430: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60432: client connect
+[REDACTED_LAN]:60432: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60432: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60432: client disconnect
+[REDACTED_LAN]:60432: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60434: client connect
+[REDACTED_LAN]:60434: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60434: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60434: client disconnect
+[REDACTED_LAN]:60434: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60436: client connect
+[REDACTED_LAN]:60436: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60436: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60436: client disconnect
+[REDACTED_LAN]:60436: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60438: client connect
+[REDACTED_LAN]:60438: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60438: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60438: client disconnect
+[REDACTED_LAN]:60438: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60440: client connect
+[REDACTED_LAN]:60440: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60440: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60440: client disconnect
+[REDACTED_LAN]:60440: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60442: client connect
+[REDACTED_LAN]:60442: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60442: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60442: client disconnect
+[REDACTED_LAN]:60442: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60444: client connect
+[REDACTED_LAN]:60444: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60444: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60444: client disconnect
+[REDACTED_LAN]:60444: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60446: client connect
+[REDACTED_LAN]:60446: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60446: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60446: client disconnect
+[REDACTED_LAN]:60446: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60448: client connect
+[REDACTED_LAN]:60448: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60448: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60448: client disconnect
+[REDACTED_LAN]:60448: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60450: client connect
+[REDACTED_LAN]:60450: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60450: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60450: client disconnect
+[REDACTED_LAN]:60450: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60452: client connect
+[REDACTED_LAN]:60452: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60452: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60452: client disconnect
+[REDACTED_LAN]:60452: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60454: client connect
+[REDACTED_LAN]:60454: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60454: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60454: client disconnect
+[REDACTED_LAN]:60454: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60456: client connect
+[REDACTED_LAN]:60456: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60456: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60456: client disconnect
+[REDACTED_LAN]:60456: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60458: client connect
+[REDACTED_LAN]:60458: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60458: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60458: client disconnect
+[REDACTED_LAN]:60458: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60460: client connect
+[REDACTED_LAN]:60460: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60460: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60460: client disconnect
+[REDACTED_LAN]:60460: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60462: client connect
+[REDACTED_LAN]:60462: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60462: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60462: client disconnect
+[REDACTED_LAN]:60462: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60464: client connect
+[REDACTED_LAN]:60464: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60464: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60464: client disconnect
+[REDACTED_LAN]:60464: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60466: client connect
+[REDACTED_LAN]:60468: client connect
+[REDACTED_LAN]:60466: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60468: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60468: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60468: client disconnect
+[REDACTED_LAN]:60468: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60466: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60466: client disconnect
+[REDACTED_LAN]:60466: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60470: client connect
+[REDACTED_LAN]:60472: client connect
+[REDACTED_LAN]:60470: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60472: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60472: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60472: client disconnect
+[REDACTED_LAN]:60472: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60470: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60470: client disconnect
+[REDACTED_LAN]:60470: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60474: client connect
+[REDACTED_LAN]:60474: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60474: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60474: client disconnect
+[REDACTED_LAN]:60474: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60476: client connect
+[REDACTED_LAN]:60476: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60476: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60476: client disconnect
+[REDACTED_LAN]:60476: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60478: client connect
+[REDACTED_LAN]:60478: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60478: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60478: client disconnect
+[REDACTED_LAN]:60478: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60480: client connect
+[REDACTED_LAN]:60480: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60480: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60480: client disconnect
+[REDACTED_LAN]:60480: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60482: client connect
+[REDACTED_LAN]:60482: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60482: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60482: client disconnect
+[REDACTED_LAN]:60482: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60484: client connect
+[REDACTED_LAN]:60484: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60484: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60484: client disconnect
+[REDACTED_LAN]:60484: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60486: client connect
+[REDACTED_LAN]:60486: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60486: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60486: client disconnect
+[REDACTED_LAN]:60486: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60488: client connect
+[REDACTED_LAN]:60488: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60488: POST https://api.crealitycloud.com/api/cxy/v2/firmware/checkUpgrade
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    __CXY_UID_: [REDACTED_ACCOUNT_UID]
+    Content-Length: 111
+ << 200 OK 225b
+    Date: Sun, 31 May 2026 01:52:36 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 225
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:22:36 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60488: client disconnect
+[REDACTED_LAN]:60488: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60490: client connect
+[REDACTED_LAN]:60490: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60490: POST https://api.crealitycloud.com/api/cxy/v2/firmware/checkUpgrade
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    __CXY_UID_: [REDACTED_ACCOUNT_UID]
+    Content-Length: 112
+ << 200 OK 81b
+    Date: Sun, 31 May 2026 01:52:36 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 81
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:22:36 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60490: client disconnect
+[REDACTED_LAN]:60490: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60492: client connect
+[REDACTED_LAN]:60492: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60492: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60492: client disconnect
+[REDACTED_LAN]:60492: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60494: client connect
+[REDACTED_LAN]:60494: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60494: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60494: client disconnect
+[REDACTED_LAN]:60494: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60496: client connect
+[REDACTED_LAN]:60496: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60496: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60496: client disconnect
+[REDACTED_LAN]:60496: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60498: client connect
+[REDACTED_LAN]:60498: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60498: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60498: client disconnect
+[REDACTED_LAN]:60498: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60500: client connect
+[REDACTED_LAN]:60500: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60500: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60500: client disconnect
+[REDACTED_LAN]:60500: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60502: client connect
+[REDACTED_LAN]:60502: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60502: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60502: client disconnect
+[REDACTED_LAN]:60502: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60504: client connect
+[REDACTED_LAN]:60504: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60504: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60504: client disconnect
+[REDACTED_LAN]:60504: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60506: client connect
+[REDACTED_LAN]:60506: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60506: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60506: client disconnect
+[REDACTED_LAN]:60506: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60508: client connect
+[REDACTED_LAN]:60508: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60508: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60508: client disconnect
+[REDACTED_LAN]:60508: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60510: client connect
+[REDACTED_LAN]:60510: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60510: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60510: client disconnect
+[REDACTED_LAN]:60510: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60512: client connect
+[REDACTED_LAN]:60512: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60512: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60512: client disconnect
+[REDACTED_LAN]:60512: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60514: client connect
+[REDACTED_LAN]:60514: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60514: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60514: client disconnect
+[REDACTED_LAN]:60514: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60516: client connect
+[REDACTED_LAN]:60516: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60516: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60516: client disconnect
+[REDACTED_LAN]:60516: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60520: client connect
+[REDACTED_LAN]:60520: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60522: client connect
+[REDACTED_LAN]:60522: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60524: client connect
+[REDACTED_LAN]:60520: POST https://api.crealitycloud.com/api/cxy/v2/firmware/checkUpgrade
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    __CXY_UID_: [REDACTED_ACCOUNT_UID]
+    Content-Length: 111
+ << 200 OK 225b
+    Date: Sun, 31 May 2026 01:53:40 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 225
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:23:40 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60524: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60520: client disconnect
+[REDACTED_LAN]:60520: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60526: client connect
+[REDACTED_LAN]:60526: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60522: POST https://api.crealitycloud.com/api/cxy/v2/device/user/onwerInfo
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    Content-Length: 2
+ << 200 OK 342b
+    Date: Sun, 31 May 2026 01:53:40 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 342
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:23:40 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60522: client disconnect
+[REDACTED_LAN]:60522: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60524: POST https://api.crealitycloud.com/api/cxy/v2/slice/profile/official/material/printerParameter
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    Content-Length: 81
+ << 200 OK 114b
+    Date: Sun, 31 May 2026 01:53:40 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 114
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:23:40 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60524: client disconnect
+[REDACTED_LAN]:60524: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60528: client connect
+[REDACTED_LAN]:60528: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60526: POST https://api.crealitycloud.com/api/cxy/v2/firmware/checkUpgrade
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    __CXY_UID_: [REDACTED_ACCOUNT_UID]
+    Content-Length: 112
+ << 200 OK 81b
+    Date: Sun, 31 May 2026 01:53:40 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 81
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:23:40 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60526: client disconnect
+[REDACTED_LAN]:60526: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60528: POST https://api.crealitycloud.com/api/cxy/v2/device/printerTypeListNew
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    Content-Length: 2
+ << 200 OK 99.0k
+    Date: Sun, 31 May 2026 01:53:40 GMT
+    Content-Type: application/json; charset=utf-8
+    Transfer-Encoding: chunked
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    Vary: Accept-Encoding
+    Access-Control-Max-Age: 86400
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:23:40 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60528: client disconnect
+[REDACTED_LAN]:60528: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60530: client connect
+[REDACTED_LAN]:60530: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60530: POST https://api.crealitycloud.com/api/cxy/v2/slice/profile/user/listJwt
+    Host: api.crealitycloud.com
+    Accept: */*
+    Content-Type: application/json; charset=UTF-8
+    __CXY_BRAND_: creality
+    __CXY_OS_VER_: 5.4.61
+    __CXY_OS_LANG_: 0
+    __CXY_PLATFORM_: 10
+    __CXY_DUID_: [REDACTED_DEVICE_SERIAL]
+    __CXY_APP_VER_: 1.1.5.5
+    __CXY_APP_CH_: creality
+    __CXY_APP_ID_: creality_model
+    __CXY_REQUESTID_: [REDACTED_REQID]
+    __CXY_TIMEZONE_: -18000
+    __CXY_JWTOKEN_: [REDACTED_JWT]
+    Content-Length: 31
+ << 200 OK 88b
+    Date: Sun, 31 May 2026 01:53:41 GMT
+    Content-Type: application/json; charset=utf-8
+    Content-Length: 88
+    Connection: keep-alive
+    access-control-allow-credentials: true
+    cf-cache-status: DYNAMIC
+    set-cookie: __cf_bm=[REDACTED_CF_BM]; HttpOnly; Secure; Path=/; Domain=crealitycloud.com; Expires=Sun, 31 May 2026 02:23:41 GMT
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60530: client disconnect
+[REDACTED_LAN]:60530: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60532: client connect
+[REDACTED_LAN]:60532: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60532: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60532: client disconnect
+[REDACTED_LAN]:60532: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60536: client connect
+[REDACTED_LAN]:60536: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60536: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60536: client disconnect
+[REDACTED_LAN]:60536: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60538: client connect
+[REDACTED_LAN]:60538: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60538: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60538: client disconnect
+[REDACTED_LAN]:60538: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60542: client connect
+[REDACTED_LAN]:60542: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60542: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60542: client disconnect
+[REDACTED_LAN]:60542: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60544: client connect
+[REDACTED_LAN]:60544: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60544: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60544: client disconnect
+[REDACTED_LAN]:60544: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60546: client connect
+[REDACTED_LAN]:60546: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60546: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60546: client disconnect
+[REDACTED_LAN]:60546: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60548: client connect
+[REDACTED_LAN]:60548: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60548: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60548: client disconnect
+[REDACTED_LAN]:60548: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60550: client connect
+[REDACTED_LAN]:60550: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60550: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60550: client disconnect
+[REDACTED_LAN]:60550: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60552: client connect
+[REDACTED_LAN]:60552: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60552: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60552: client disconnect
+[REDACTED_LAN]:60552: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60554: client connect
+[REDACTED_LAN]:60554: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60554: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60554: client disconnect
+[REDACTED_LAN]:60554: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60556: client connect
+[REDACTED_LAN]:60556: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60556: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60556: client disconnect
+[REDACTED_LAN]:60556: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60558: client connect
+[REDACTED_LAN]:60558: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60558: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60558: client disconnect
+[REDACTED_LAN]:60558: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60560: client connect
+[REDACTED_LAN]:60560: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60560: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60560: client disconnect
+[REDACTED_LAN]:60560: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60562: client connect
+[REDACTED_LAN]:60562: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60562: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60562: client disconnect
+[REDACTED_LAN]:60562: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60564: client connect
+[REDACTED_LAN]:60564: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60564: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60564: client disconnect
+[REDACTED_LAN]:60564: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60566: client connect
+[REDACTED_LAN]:60566: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60566: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60566: client disconnect
+[REDACTED_LAN]:60566: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60568: client connect
+[REDACTED_LAN]:60568: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60568: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60568: client disconnect
+[REDACTED_LAN]:60568: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60570: client connect
+[REDACTED_LAN]:60570: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60570: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60570: client disconnect
+[REDACTED_LAN]:60570: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60572: client connect
+[REDACTED_LAN]:60572: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60572: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60572: client disconnect
+[REDACTED_LAN]:60572: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60574: client connect
+[REDACTED_LAN]:60574: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60574: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60574: client disconnect
+[REDACTED_LAN]:60574: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60576: client connect
+[REDACTED_LAN]:60576: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60576: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60576: client disconnect
+[REDACTED_LAN]:60576: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60578: client connect
+[REDACTED_LAN]:60578: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60578: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60578: client disconnect
+[REDACTED_LAN]:60578: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60580: client connect
+[REDACTED_LAN]:60580: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60580: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60580: client disconnect
+[REDACTED_LAN]:60580: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60582: client connect
+[REDACTED_LAN]:60582: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60582: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60582: client disconnect
+[REDACTED_LAN]:60582: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60584: client connect
+[REDACTED_LAN]:60584: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60584: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60584: client disconnect
+[REDACTED_LAN]:60584: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60586: client connect
+[REDACTED_LAN]:60586: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60586: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60586: client disconnect
+[REDACTED_LAN]:60586: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60588: client connect
+[REDACTED_LAN]:60588: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60588: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60588: client disconnect
+[REDACTED_LAN]:60588: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60590: client connect
+[REDACTED_LAN]:60590: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60590: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60590: client disconnect
+[REDACTED_LAN]:60590: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60592: client connect
+[REDACTED_LAN]:60592: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60592: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60592: client disconnect
+[REDACTED_LAN]:60592: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60594: client connect
+[REDACTED_LAN]:60594: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60594: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60594: client disconnect
+[REDACTED_LAN]:60594: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60596: client connect
+[REDACTED_LAN]:60596: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60596: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60596: client disconnect
+[REDACTED_LAN]:60596: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60598: client connect
+[REDACTED_LAN]:60598: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60598: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60598: client disconnect
+[REDACTED_LAN]:60598: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60600: client connect
+[REDACTED_LAN]:60600: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60600: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60600: client disconnect
+[REDACTED_LAN]:60600: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60602: client connect
+[REDACTED_LAN]:60602: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60602: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60602: client disconnect
+[REDACTED_LAN]:60602: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60604: client connect
+[REDACTED_LAN]:60604: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60604: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60604: client disconnect
+[REDACTED_LAN]:60604: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60606: client connect
+[REDACTED_LAN]:60606: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60606: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60606: client disconnect
+[REDACTED_LAN]:60606: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60608: client connect
+[REDACTED_LAN]:60608: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60608: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60608: client disconnect
+[REDACTED_LAN]:60608: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60610: client connect
+[REDACTED_LAN]:60610: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60610: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60610: client disconnect
+[REDACTED_LAN]:60610: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60612: client connect
+[REDACTED_LAN]:60612: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60612: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60612: client disconnect
+[REDACTED_LAN]:60612: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60614: client connect
+[REDACTED_LAN]:60614: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60614: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60614: client disconnect
+[REDACTED_LAN]:60614: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60616: client connect
+[REDACTED_LAN]:60616: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60616: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60616: client disconnect
+[REDACTED_LAN]:60616: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60618: client connect
+[REDACTED_LAN]:60618: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60618: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60618: client disconnect
+[REDACTED_LAN]:60618: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60620: client connect
+[REDACTED_LAN]:60620: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60620: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60620: client disconnect
+[REDACTED_LAN]:60620: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60622: client connect
+[REDACTED_LAN]:60622: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60622: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60622: client disconnect
+[REDACTED_LAN]:60622: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60624: client connect
+[REDACTED_LAN]:60624: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60624: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60624: client disconnect
+[REDACTED_LAN]:60624: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60626: client connect
+[REDACTED_LAN]:60626: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60626: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60626: client disconnect
+[REDACTED_LAN]:60626: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60628: client connect
+[REDACTED_LAN]:60628: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60628: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60628: client disconnect
+[REDACTED_LAN]:60628: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60630: client connect
+[REDACTED_LAN]:60630: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60630: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60630: client disconnect
+[REDACTED_LAN]:60630: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60632: client connect
+[REDACTED_LAN]:60632: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632: GET https://api.crealitycloud.com/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+    Pragma: no-cache
+    Cache-Control: no-cache
+    Host: api.crealitycloud.com
+    Origin: https://api.crealitycloud.com
+    Upgrade: websocket
+    Connection: Upgrade
+    Sec-WebSocket-Key: RRMmcAYzISO4TY2kU8xb9A==
+    Sec-WebSocket-Protocol: lws-minimal
+    Sec-WebSocket-Version: 13
+ << 101 Switching Protocols 0b
+    Date: Sun, 31 May 2026 01:59:07 GMT
+    Connection: upgrade
+    Sec-Websocket-Accept: Dfa2upaCbeBcsfVg0JApyqbR9Gs=
+    Upgrade: websocket
+    cf-cache-status: DYNAMIC
+    Set-Cookie: __cf_bm=[REDACTED_CF_BM]; path=/; expires=Sun, 31-May-26 02:29:07 GMT; domain=.crealitycloud.com; HttpOnly; Secure
+    Access-Control-Allow-Headers: *
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Origin: *
+    Access-Control-Max-Age: 86400
+    access-control-allow-credentials: true
+    Server: cloudflare
+    CF-RAY: [REDACTED_CF_RAY]
+    alt-svc: h3=":443"; ma=86400
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 <- WebSocket text message <- api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60636: client connect
+[REDACTED_LAN]:60636: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60636: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60636: client disconnect
+[REDACTED_LAN]:60636: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60638: client connect
+[REDACTED_LAN]:60638: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60638: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60638: client disconnect
+[REDACTED_LAN]:60638: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60640: client connect
+[REDACTED_LAN]:60640: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60640: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60640: client disconnect
+[REDACTED_LAN]:60640: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60642: client connect
+[REDACTED_LAN]:60642: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60642: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60642: client disconnect
+[REDACTED_LAN]:60642: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60644: client connect
+[REDACTED_LAN]:60644: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60644: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60644: client disconnect
+[REDACTED_LAN]:60644: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60646: client connect
+[REDACTED_LAN]:60646: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60646: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60646: client disconnect
+[REDACTED_LAN]:60646: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60648: client connect
+[REDACTED_LAN]:60648: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60648: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60648: client disconnect
+[REDACTED_LAN]:60648: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60650: client connect
+[REDACTED_LAN]:60650: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60652: client connect
+[REDACTED_LAN]:60652: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60652: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60652: client disconnect
+[REDACTED_LAN]:60652: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60654: client connect
+[REDACTED_LAN]:60654: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60654: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60654: client disconnect
+[REDACTED_LAN]:60654: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60656: client connect
+[REDACTED_LAN]:60656: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60656: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60656: client disconnect
+[REDACTED_LAN]:60656: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60658: client connect
+[REDACTED_LAN]:60658: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60658: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60658: client disconnect
+[REDACTED_LAN]:60658: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60660: client connect
+[REDACTED_LAN]:60660: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60660: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60660: client disconnect
+[REDACTED_LAN]:60660: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60662: client connect
+[REDACTED_LAN]:60662: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60662: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60662: client disconnect
+[REDACTED_LAN]:60662: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60664: client connect
+[REDACTED_LAN]:60664: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60664: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60664: client disconnect
+[REDACTED_LAN]:60664: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60666: client connect
+[REDACTED_LAN]:60666: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60666: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60666: client disconnect
+[REDACTED_LAN]:60666: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60668: client connect
+[REDACTED_LAN]:60668: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60668: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60668: client disconnect
+[REDACTED_LAN]:60668: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60670: client connect
+[REDACTED_LAN]:60670: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60670: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60670: client disconnect
+[REDACTED_LAN]:60670: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60672: client connect
+[REDACTED_LAN]:60672: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60672: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60672: client disconnect
+[REDACTED_LAN]:60672: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60674: client connect
+[REDACTED_LAN]:60674: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60674: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60674: client disconnect
+[REDACTED_LAN]:60674: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60676: client connect
+[REDACTED_LAN]:60676: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60676: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60676: client disconnect
+[REDACTED_LAN]:60676: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60678: client connect
+[REDACTED_LAN]:60678: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60678: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60678: client disconnect
+[REDACTED_LAN]:60678: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60680: client connect
+[REDACTED_LAN]:60680: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60680: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60680: client disconnect
+[REDACTED_LAN]:60680: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60682: client connect
+[REDACTED_LAN]:60682: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60682: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60682: client disconnect
+[REDACTED_LAN]:60682: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60684: client connect
+[REDACTED_LAN]:60684: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60684: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60684: client disconnect
+[REDACTED_LAN]:60684: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60686: client connect
+[REDACTED_LAN]:60686: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60686: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60686: client disconnect
+[REDACTED_LAN]:60686: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60688: client connect
+[REDACTED_LAN]:60688: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60688: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60688: client disconnect
+[REDACTED_LAN]:60688: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60690: client connect
+[REDACTED_LAN]:60690: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60690: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60690: client disconnect
+[REDACTED_LAN]:60690: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60692: client connect
+[REDACTED_LAN]:60692: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60692: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60692: client disconnect
+[REDACTED_LAN]:60692: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60694: client connect
+[REDACTED_LAN]:60694: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60694: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60694: client disconnect
+[REDACTED_LAN]:60694: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60696: client connect
+[REDACTED_LAN]:60696: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60696: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60696: client disconnect
+[REDACTED_LAN]:60696: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60698: client connect
+[REDACTED_LAN]:60698: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60698: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60698: client disconnect
+[REDACTED_LAN]:60698: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60700: client connect
+[REDACTED_LAN]:60700: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60700: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60700: client disconnect
+[REDACTED_LAN]:60700: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60702: client connect
+[REDACTED_LAN]:60702: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60702: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60702: client disconnect
+[REDACTED_LAN]:60702: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60704: client connect
+[REDACTED_LAN]:60704: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60704: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60704: client disconnect
+[REDACTED_LAN]:60704: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60706: client connect
+[REDACTED_LAN]:60706: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60706: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60706: client disconnect
+[REDACTED_LAN]:60706: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60708: client connect
+[REDACTED_LAN]:60708: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60708: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60708: client disconnect
+[REDACTED_LAN]:60708: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60710: client connect
+[REDACTED_LAN]:60710: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60710: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60710: client disconnect
+[REDACTED_LAN]:60710: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60712: client connect
+[REDACTED_LAN]:60712: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60712: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60712: client disconnect
+[REDACTED_LAN]:60712: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60714: client connect
+[REDACTED_LAN]:60714: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60714: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60714: client disconnect
+[REDACTED_LAN]:60714: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60716: client connect
+[REDACTED_LAN]:60716: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60716: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60716: client disconnect
+[REDACTED_LAN]:60716: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60718: client connect
+[REDACTED_LAN]:60718: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60718: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60718: client disconnect
+[REDACTED_LAN]:60718: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60720: client connect
+[REDACTED_LAN]:60720: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60720: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60720: client disconnect
+[REDACTED_LAN]:60720: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60722: client connect
+[REDACTED_LAN]:60722: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60722: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60722: client disconnect
+[REDACTED_LAN]:60722: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60724: client connect
+[REDACTED_LAN]:60724: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60724: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60724: client disconnect
+[REDACTED_LAN]:60724: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60726: client connect
+[REDACTED_LAN]:60726: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60726: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60726: client disconnect
+[REDACTED_LAN]:60726: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60728: client connect
+[REDACTED_LAN]:60728: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60728: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60728: client disconnect
+[REDACTED_LAN]:60728: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60730: client connect
+[REDACTED_LAN]:60730: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60730: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60730: client disconnect
+[REDACTED_LAN]:60730: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60732: client connect
+[REDACTED_LAN]:60732: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60732: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60732: client disconnect
+[REDACTED_LAN]:60732: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60734: client connect
+[REDACTED_LAN]:60734: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60734: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60734: client disconnect
+[REDACTED_LAN]:60734: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60736: client connect
+[REDACTED_LAN]:60736: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60736: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60736: client disconnect
+[REDACTED_LAN]:60736: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60738: client connect
+[REDACTED_LAN]:60738: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60738: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60738: client disconnect
+[REDACTED_LAN]:60738: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60740: client connect
+[REDACTED_LAN]:60740: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60740: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60740: client disconnect
+[REDACTED_LAN]:60740: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60742: client connect
+[REDACTED_LAN]:60742: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60742: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60742: client disconnect
+[REDACTED_LAN]:60742: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60744: client connect
+[REDACTED_LAN]:60744: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60744: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60744: client disconnect
+[REDACTED_LAN]:60744: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60746: client connect
+[REDACTED_LAN]:60746: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60746: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60746: client disconnect
+[REDACTED_LAN]:60746: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60748: client connect
+[REDACTED_LAN]:60748: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60748: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60748: client disconnect
+[REDACTED_LAN]:60748: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60750: client connect
+[REDACTED_LAN]:60750: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60750: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60750: client disconnect
+[REDACTED_LAN]:60750: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60752: client connect
+[REDACTED_LAN]:60752: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60752: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60752: client disconnect
+[REDACTED_LAN]:60752: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60754: client connect
+[REDACTED_LAN]:60754: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60754: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60754: client disconnect
+[REDACTED_LAN]:60754: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60756: client connect
+[REDACTED_LAN]:60756: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60756: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60756: client disconnect
+[REDACTED_LAN]:60756: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60758: client connect
+[REDACTED_LAN]:60758: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60758: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60758: client disconnect
+[REDACTED_LAN]:60758: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60760: client connect
+[REDACTED_LAN]:60760: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60760: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60760: client disconnect
+[REDACTED_LAN]:60760: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60632: Received WebSocket ping from client (payload: b'')
+[REDACTED_LAN]:60632: Received WebSocket pong from server (payload: b'')
+[REDACTED_LAN]:60762: client connect
+[REDACTED_LAN]:60762: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60762: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60762: client disconnect
+[REDACTED_LAN]:60762: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60764: client connect
+[REDACTED_LAN]:60764: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60764: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60764: client disconnect
+[REDACTED_LAN]:60764: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60766: client connect
+[REDACTED_LAN]:60766: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60766: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60766: client disconnect
+[REDACTED_LAN]:60766: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60768: client connect
+[REDACTED_LAN]:60768: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60768: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60768: client disconnect
+[REDACTED_LAN]:60768: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60770: client connect
+[REDACTED_LAN]:60770: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60770: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60770: client disconnect
+[REDACTED_LAN]:60770: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60772: client connect
+[REDACTED_LAN]:60772: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60772: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60772: client disconnect
+[REDACTED_LAN]:60772: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60774: client connect
+[REDACTED_LAN]:60774: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60774: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60774: client disconnect
+[REDACTED_LAN]:60774: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60776: client connect
+[REDACTED_LAN]:60778: client connect
+[REDACTED_LAN]:60776: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60778: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60776: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60776: client disconnect
+[REDACTED_LAN]:60776: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60778: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60778: client disconnect
+[REDACTED_LAN]:60778: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60780: client connect
+[REDACTED_LAN]:60780: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60780: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60780: client disconnect
+[REDACTED_LAN]:60780: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60782: client connect
+[REDACTED_LAN]:60782: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60782: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60782: client disconnect
+[REDACTED_LAN]:60782: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60784: client connect
+[REDACTED_LAN]:60784: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60784: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60784: client disconnect
+[REDACTED_LAN]:60784: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60786: client connect
+[REDACTED_LAN]:60786: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60786: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60786: client disconnect
+[REDACTED_LAN]:60786: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60788: client connect
+[REDACTED_LAN]:60788: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60788: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60788: client disconnect
+[REDACTED_LAN]:60788: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60790: client connect
+[REDACTED_LAN]:60790: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60790: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60790: client disconnect
+[REDACTED_LAN]:60790: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60792: client connect
+[REDACTED_LAN]:60792: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60792: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60792: client disconnect
+[REDACTED_LAN]:60792: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60794: client connect
+[REDACTED_LAN]:60794: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60794: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60794: client disconnect
+[REDACTED_LAN]:60794: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60796: client connect
+[REDACTED_LAN]:60796: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60796: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60796: client disconnect
+[REDACTED_LAN]:60796: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60798: client connect
+[REDACTED_LAN]:60798: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60798: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60798: client disconnect
+[REDACTED_LAN]:60798: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60800: client connect
+[REDACTED_LAN]:60800: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60800: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60800: client disconnect
+[REDACTED_LAN]:60800: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60802: client connect
+[REDACTED_LAN]:60802: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60802: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60802: client disconnect
+[REDACTED_LAN]:60802: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60804: client connect
+[REDACTED_LAN]:60804: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60804: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60804: client disconnect
+[REDACTED_LAN]:60804: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60806: client connect
+[REDACTED_LAN]:60806: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60806: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60806: client disconnect
+[REDACTED_LAN]:60806: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60808: client connect
+[REDACTED_LAN]:60808: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60808: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60808: client disconnect
+[REDACTED_LAN]:60808: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60810: client connect
+[REDACTED_LAN]:60810: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60810: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60810: client disconnect
+[REDACTED_LAN]:60810: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60812: client connect
+[REDACTED_LAN]:60812: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60812: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60812: client disconnect
+[REDACTED_LAN]:60812: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60814: client connect
+[REDACTED_LAN]:60814: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60814: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60814: client disconnect
+[REDACTED_LAN]:60814: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60816: client connect
+[REDACTED_LAN]:60816: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60816: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60816: client disconnect
+[REDACTED_LAN]:60816: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60818: client connect
+[REDACTED_LAN]:60818: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60818: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60818: client disconnect
+[REDACTED_LAN]:60818: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60820: client connect
+[REDACTED_LAN]:60820: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60820: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60820: client disconnect
+[REDACTED_LAN]:60820: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60822: client connect
+[REDACTED_LAN]:60822: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60822: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60822: client disconnect
+[REDACTED_LAN]:60822: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60824: client connect
+[REDACTED_LAN]:60824: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60824: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60824: client disconnect
+[REDACTED_LAN]:60824: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60826: client connect
+[REDACTED_LAN]:60826: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60826: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60826: client disconnect
+[REDACTED_LAN]:60826: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60828: client connect
+[REDACTED_LAN]:60828: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60828: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60828: client disconnect
+[REDACTED_LAN]:60828: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60830: client connect
+[REDACTED_LAN]:60830: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60830: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60830: client disconnect
+[REDACTED_LAN]:60830: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60832: client connect
+[REDACTED_LAN]:60832: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60832: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60832: client disconnect
+[REDACTED_LAN]:60832: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60834: client connect
+[REDACTED_LAN]:60834: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60834: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60834: client disconnect
+[REDACTED_LAN]:60834: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60836: client connect
+[REDACTED_LAN]:60836: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60836: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60836: client disconnect
+[REDACTED_LAN]:60836: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60838: client connect
+[REDACTED_LAN]:60838: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60838: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60838: client disconnect
+[REDACTED_LAN]:60838: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60840: client connect
+[REDACTED_LAN]:60840: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60840: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60840: client disconnect
+[REDACTED_LAN]:60840: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60842: client connect
+[REDACTED_LAN]:60842: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60842: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60842: client disconnect
+[REDACTED_LAN]:60842: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60844: client connect
+[REDACTED_LAN]:60844: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60844: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60844: client disconnect
+[REDACTED_LAN]:60844: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60846: client connect
+[REDACTED_LAN]:60846: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60846: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60846: client disconnect
+[REDACTED_LAN]:60846: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60632 -> WebSocket text message -> api.crealitycloud.com:443/api/cxy/ws/webrtc/signal/push/[REDACTED_DEVICE_SERIAL]
+[REDACTED_LAN]:60848: client connect
+[REDACTED_LAN]:60848: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60848: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60848: client disconnect
+[REDACTED_LAN]:60848: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60850: client connect
+[REDACTED_LAN]:60850: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60850: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60850: client disconnect
+[REDACTED_LAN]:60850: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60852: client connect
+[REDACTED_LAN]:60852: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60852: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60852: client disconnect
+[REDACTED_LAN]:60852: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60854: client connect
+[REDACTED_LAN]:60854: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60854: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60854: client disconnect
+[REDACTED_LAN]:60854: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60856: client connect
+[REDACTED_LAN]:60856: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60856: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60856: client disconnect
+[REDACTED_LAN]:60856: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60858: client connect
+[REDACTED_LAN]:60858: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60858: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60858: client disconnect
+[REDACTED_LAN]:60858: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60860: client connect
+[REDACTED_LAN]:60860: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60860: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60860: client disconnect
+[REDACTED_LAN]:60860: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60862: client connect
+[REDACTED_LAN]:60862: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60862: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60862: client disconnect
+[REDACTED_LAN]:60862: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60864: client connect
+[REDACTED_LAN]:60864: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60864: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60864: client disconnect
+[REDACTED_LAN]:60864: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60866: client connect
+[REDACTED_LAN]:60866: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60866: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60866: client disconnect
+[REDACTED_LAN]:60866: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60868: client connect
+[REDACTED_LAN]:60868: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60868: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60868: client disconnect
+[REDACTED_LAN]:60868: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60870: client connect
+[REDACTED_LAN]:60870: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60870: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60870: client disconnect
+[REDACTED_LAN]:60870: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60872: client connect
+[REDACTED_LAN]:60872: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60872: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60872: client disconnect
+[REDACTED_LAN]:60872: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60874: client connect
+[REDACTED_LAN]:60874: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60874: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60874: client disconnect
+[REDACTED_LAN]:60874: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60876: client connect
+[REDACTED_LAN]:60876: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60876: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60876: client disconnect
+[REDACTED_LAN]:60876: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+Error in WebSocket connection to api.crealitycloud.com:443: WebSocket Error: ABNORMAL_CLOSURE
+[REDACTED_LAN]:60632: client disconnect
+[REDACTED_LAN]:60632: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60878: client connect
+[REDACTED_LAN]:60878: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60878: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60878: client disconnect
+[REDACTED_LAN]:60878: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60880: client connect
+[REDACTED_LAN]:60880: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60880: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60880: client disconnect
+[REDACTED_LAN]:60880: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60882: client connect
+[REDACTED_LAN]:60882: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60882: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60882: client disconnect
+[REDACTED_LAN]:60882: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60884: client connect
+[REDACTED_LAN]:60884: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60884: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60884: client disconnect
+[REDACTED_LAN]:60884: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60886: client connect
+[REDACTED_LAN]:60886: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60886: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60886: client disconnect
+[REDACTED_LAN]:60886: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60888: client connect
+[REDACTED_LAN]:60888: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60888: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60888: client disconnect
+[REDACTED_LAN]:60888: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60890: client connect
+[REDACTED_LAN]:60890: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60890: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60890: client disconnect
+[REDACTED_LAN]:60890: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60892: client connect
+[REDACTED_LAN]:60892: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60892: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60892: client disconnect
+[REDACTED_LAN]:60892: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60894: client connect
+[REDACTED_LAN]:60894: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60894: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60894: client disconnect
+[REDACTED_LAN]:60894: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60896: client connect
+[REDACTED_LAN]:60896: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60896: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60896: client disconnect
+[REDACTED_LAN]:60896: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60898: client connect
+[REDACTED_LAN]:60898: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60898: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60898: client disconnect
+[REDACTED_LAN]:60898: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60900: client connect
+[REDACTED_LAN]:60900: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60900: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60900: client disconnect
+[REDACTED_LAN]:60900: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60902: client connect
+[REDACTED_LAN]:60902: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60902: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60902: client disconnect
+[REDACTED_LAN]:60902: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60904: client connect
+[REDACTED_LAN]:60904: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60904: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60904: client disconnect
+[REDACTED_LAN]:60904: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60906: client connect
+[REDACTED_LAN]:60906: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60906: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60906: client disconnect
+[REDACTED_LAN]:60906: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60908: client connect
+[REDACTED_LAN]:60908: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60908: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60908: client disconnect
+[REDACTED_LAN]:60908: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60910: client connect
+[REDACTED_LAN]:60910: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60910: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60910: client disconnect
+[REDACTED_LAN]:60910: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60912: client connect
+[REDACTED_LAN]:60912: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60912: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60912: client disconnect
+[REDACTED_LAN]:60912: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60914: client connect
+[REDACTED_LAN]:60914: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60914: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60914: client disconnect
+[REDACTED_LAN]:60914: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60916: client connect
+[REDACTED_LAN]:60916: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60916: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60916: client disconnect
+[REDACTED_LAN]:60916: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60918: client connect
+[REDACTED_LAN]:60918: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60918: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60918: client disconnect
+[REDACTED_LAN]:60918: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60920: client connect
+[REDACTED_LAN]:60920: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60920: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60920: client disconnect
+[REDACTED_LAN]:60920: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60922: client connect
+[REDACTED_LAN]:60922: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60922: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60922: client disconnect
+[REDACTED_LAN]:60922: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60924: client connect
+[REDACTED_LAN]:60924: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60924: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60924: client disconnect
+[REDACTED_LAN]:60924: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60926: client connect
+[REDACTED_LAN]:60926: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60926: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60926: client disconnect
+[REDACTED_LAN]:60926: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60928: client connect
+[REDACTED_LAN]:60928: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60928: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60928: client disconnect
+[REDACTED_LAN]:60928: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60930: client connect
+[REDACTED_LAN]:60930: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60930: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60930: client disconnect
+[REDACTED_LAN]:60930: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60932: client connect
+[REDACTED_LAN]:60932: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60932: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60932: client disconnect
+[REDACTED_LAN]:60932: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60934: client connect
+[REDACTED_LAN]:60934: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60934: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60934: client disconnect
+[REDACTED_LAN]:60934: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60936: client connect
+[REDACTED_LAN]:60936: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60936: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60936: client disconnect
+[REDACTED_LAN]:60936: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60938: client connect
+[REDACTED_LAN]:60938: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60938: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60938: client disconnect
+[REDACTED_LAN]:60938: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60940: client connect
+[REDACTED_LAN]:60940: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60940: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60940: client disconnect
+[REDACTED_LAN]:60940: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60942: client connect
+[REDACTED_LAN]:60942: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60942: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60942: client disconnect
+[REDACTED_LAN]:60942: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60944: client connect
+[REDACTED_LAN]:60944: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60944: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60944: client disconnect
+[REDACTED_LAN]:60944: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60946: client connect
+[REDACTED_LAN]:60946: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60946: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60946: client disconnect
+[REDACTED_LAN]:60946: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60948: client connect
+[REDACTED_LAN]:60948: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60948: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60948: client disconnect
+[REDACTED_LAN]:60948: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60950: client connect
+[REDACTED_LAN]:60950: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60950: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60950: client disconnect
+[REDACTED_LAN]:60950: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60952: client connect
+[REDACTED_LAN]:60952: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60952: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60952: client disconnect
+[REDACTED_LAN]:60952: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60650: Closing connection due to inactivity: Client([REDACTED_LAN]:60650, state=can_write)
+[REDACTED_LAN]:60650: client disconnect
+[REDACTED_LAN]:60650: Server TLS handshake failed. connection closed
+[REDACTED_LAN]:60650: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60650: server connection to api.crealitycloud.com:443 killed before connect: connection closed
+[REDACTED_LAN]:60650: Unable to establish TLS connection with server (Connection killed: connection closed). Trying to establish TLS with client anyway.
+[REDACTED_LAN]:60954: client connect
+[REDACTED_LAN]:60954: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60954: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60954: client disconnect
+[REDACTED_LAN]:60954: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60956: client connect
+[REDACTED_LAN]:60956: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60956: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60956: client disconnect
+[REDACTED_LAN]:60956: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60958: client connect
+[REDACTED_LAN]:60958: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60958: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60958: client disconnect
+[REDACTED_LAN]:60958: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60960: client connect
+[REDACTED_LAN]:60960: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60960: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60960: client disconnect
+[REDACTED_LAN]:60960: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60962: client connect
+[REDACTED_LAN]:60962: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60962: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60962: client disconnect
+[REDACTED_LAN]:60962: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60964: client connect
+[REDACTED_LAN]:60964: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60964: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60964: client disconnect
+[REDACTED_LAN]:60964: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60966: client connect
+[REDACTED_LAN]:60966: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60968: client connect
+[REDACTED_LAN]:60968: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60966: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60966: client disconnect
+[REDACTED_LAN]:60966: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60968: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60968: client disconnect
+[REDACTED_LAN]:60968: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60970: client connect
+[REDACTED_LAN]:60972: client connect
+[REDACTED_LAN]:60970: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60972: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60970: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60970: client disconnect
+[REDACTED_LAN]:60970: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60972: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60972: client disconnect
+[REDACTED_LAN]:60972: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60974: client connect
+[REDACTED_LAN]:60976: client connect
+[REDACTED_LAN]:60976: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60974: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60974: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60974: client disconnect
+[REDACTED_LAN]:60974: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60976: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60976: client disconnect
+[REDACTED_LAN]:60976: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60978: client connect
+[REDACTED_LAN]:60978: server connect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60978: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60978: client disconnect
+[REDACTED_LAN]:60978: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1d72]:443)
+[REDACTED_LAN]:60980: client connect
+[REDACTED_LAN]:60980: server connect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)
+[REDACTED_LAN]:60980: Client TLS handshake failed. The client does not trust the proxy's certificate for devdata.cxswyjy.com (sslv3 alert bad certificate)
+[REDACTED_LAN]:60980: client disconnect
+[REDACTED_LAN]:60980: server disconnect api.crealitycloud.com:443 ([2606:4700::6812:1c72]:443)

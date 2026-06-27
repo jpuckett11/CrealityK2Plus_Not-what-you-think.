@@ -54,7 +54,7 @@ This event followed:
 1. The customer's bank chargeback dispute (initial scope: SpeedX-undelivered Otter scanner portion), filed 2026-06-17 with supplemental affidavits on 2026-06-23 and 2026-06-24
 2. The customer's escalation to Affirm requesting full-order refund under FCBA § 1666i claims-and-defenses, sent 2026-06-24 with reference to the public case file and the documented merchant misconduct
 3. The customer's demand email to Creality sent earlier in the day on 2026-06-24
-4. Creality's account-wipe spoliation event approximately 1.5 hours after the demand email (documented separately at `dispute/screenshots/2026-06-24_Creality_account_wipe_profile_blank_no_orders.png`)
+4. Creality's account-wipe spoliation event approximately 1.5 hours after the demand email (screenshot evidence withheld pending sanitization; original retained under chain of custody in the investigator's private case file)
 
 ## Critical timeline finding: Creality wiped the customer's account BEFORE Affirm's decision
 
